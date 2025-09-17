@@ -4,25 +4,25 @@
     "scale": "don't change",
     "preset": "good",
     "fps": "don't change",
-    "pixel": "yuv420p",
+    "pixel_format": "yuv420p",
     "passes": "Two-Pass",
-    "container": "webm"
+    "container": "mp4"
   },
   "svt-av1": {
     "crf": 28,
     "scale": "don't change",
     "preset": "8",
     "fps": "don't change",
-    "pixel": "yuv420p",
-    "passes": "Two-Pass",
-    "container": "mkv"
+    "pixel_format": "yuv420p",
+    "passes": "One-Pass",
+    "container": "mp4"
   },
-  "hevc265": {
+  "hevc": {
     "crf": 23,
     "scale": "don't change",
     "preset": "medium",
     "fps": "don't change",
-    "pixel": "yuv420p",
+    "pixel_format": "yuv420p",
     "passes": "Two-Pass",
     "container": "mp4"
   }
