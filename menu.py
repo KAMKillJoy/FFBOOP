@@ -25,7 +25,7 @@ class Menu:
             # Проверяем Fix resolution
             extra_idx = len(options) + 1
             if self.codec.even_res:
-                fix_val = self.settings.get("scale_fix", "pad")  # pad по умолчанию
+                fix_val = self.settings.get("scale_fix")
                 print(f"{extra_idx}. Fix resolution (Now: {fix_val})")
 
             print("Enter empty input to finish selection")
