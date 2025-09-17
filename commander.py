@@ -1,6 +1,9 @@
 # commander.py
 import os
 
+import helpers
+
+
 class Commander:
     def __init__(self, codec, settings: dict):
         """
@@ -18,11 +21,11 @@ class Commander:
 
         filename, ext = os.path.splitext(os.path.basename(file))
         container = self.settings.get("container", "mp4")
-        crf = self.settings.get("crf", 35)
-        preset = self.settings.get("preset", "medium")
-        fps = self.settings.get("fps", None)
-        pixel = self.settings.get("pixel_format", None)
-        passes = self.settings.get("passes", "Two-Pass")
+        crf = self.settings.get("crf")
+        preset = self.settings.get("preset")
+        fps = self.settings.get("fps")
+        pixel = self.settings.get("pixel_format")
+        passes = self.settings.get("passes")
 
         # Видеофильтры
         vf_list = []
@@ -33,7 +36,13 @@ class Commander:
 
         scale_fix = self.settings.get("scale_fix")
         if scale_fix:
-            vf_list.append(scale_fix)
+            if scale_fix == "pad":
+                scale_fix = helpers.ResolutionFixer.pad()
+                vf_list.append(scale_fix)
+            
+            if scale_fix == "crop":
+                scale_fix = helpers.ResolutionFixer.crop()
+                vf_list.append(scale_fix)
 
         if fps and fps != "don't change":
             vf_list.append(f"fps={fps}")
