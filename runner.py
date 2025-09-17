@@ -41,6 +41,9 @@ def main(preselected_codec=None):
     # Загружаем стандартные значения
     settings = load_defaults(codec.name)
 
+    if codec.even_res and "scale_fix" not in settings:
+        settings["scale_fix"] = "pad"
+
     # Меню для настройки параметров
     menu = Menu(codec, settings)
     menu.show()
@@ -59,7 +62,7 @@ def main(preselected_codec=None):
             print(f"File not found: {file}")
             continue
 
-        cmd = cmd_builder.build_ffmpeg_command(file)
+        cmd = cmd_builder.build_ffmpeg_command(file, output_dir)
         print(f"Running:\n{cmd}\n")
         try:
             subprocess.run(cmd, shell=True, check=True)
