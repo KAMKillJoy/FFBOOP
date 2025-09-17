@@ -1,0 +1,29 @@
+{
+  "vp9": {
+    "crf": 35,
+    "scale": "don't change",
+    "preset": "good",
+    "fps": "don't change",
+    "pixel": "yuv420p",
+    "passes": "Two-Pass",
+    "container": "webm"
+  },
+  "svt-av1": {
+    "crf": 28,
+    "scale": "don't change",
+    "preset": "8",
+    "fps": "don't change",
+    "pixel": "yuv420p",
+    "passes": "Two-Pass",
+    "container": "mkv"
+  },
+  "hevc265": {
+    "crf": 23,
+    "scale": "don't change",
+    "preset": "medium",
+    "fps": "don't change",
+    "pixel": "yuv420p",
+    "passes": "Two-Pass",
+    "container": "mp4"
+  }
+}
