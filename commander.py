@@ -12,15 +12,13 @@ class Commander:
         """
         Генерация ffmpeg команды для одного файла с учётом настроек.
         """
-        output_dir = os.path.join(os.path.dirname(__file__), "output")
-        os.makedirs(output_dir, exist_ok=True)
 
         filename, ext = os.path.splitext(os.path.basename(file))
         container = self.settings.get("container", "webm")
         crf = self.settings.get("crf", 35)
         preset = self.settings.get("preset", "good")
         fps = self.settings.get("fps", None)
-        pixel = self.settings.get("pixel", None)
+        pixel = self.settings.get("pixel_format", None)
         passes = self.settings.get("passes", "Two-Pass")
 
         # Видеофильтры
