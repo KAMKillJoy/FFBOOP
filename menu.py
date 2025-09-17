@@ -1,7 +1,5 @@
 import os
 
-from helpers import ResolutionFixer
-
 
 class Menu:
     def __init__(self, codec, settings):
@@ -49,6 +47,8 @@ class Menu:
             param = options[choice_idx]
             if param == "scale":
                 self.handle_scale()
+            elif param == "crf":
+                self.handle_crf()
             else:
                 self.handle_param(param)
 
@@ -116,10 +116,10 @@ class Menu:
             print("3. Cancel")
             choice = input("> ").strip()
             if choice == "1":
-                self.settings["scale_fix"] = ResolutionFixer.pad()
+                self.settings["scale_fix"] = "pad"
                 break
             elif choice == "2":
-                self.settings["scale_fix"] = ResolutionFixer.crop()
+                self.settings["scale_fix"] = "crop"
                 break
             elif choice == "3":
                 self.settings.pop("scale_fix", None)
@@ -128,6 +128,16 @@ class Menu:
                 break
             else:
                 print("Invalid choice, try again.")
+
+    def handle_crf(self):
+        while True:
+            val = input(
+                f'Input CRF in range {self.codec.params["crf"][0]} - {self.codec.params["crf"][1]} (empty to go back):').strip()
+            if int(val) in range(self.codec.params["crf"][0], self.codec.params["crf"][1] + 1):
+                self.settings["crf"] = val
+                break
+            elif val == "":
+                break
 
     @staticmethod
     def clear_screen():
