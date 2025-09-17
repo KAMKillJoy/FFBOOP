@@ -4,12 +4,17 @@ class Codec:
             name: str,
             params: dict,
             container_defaults: list[str] = None,
-            even_res: bool = True
+            even_res: bool = True,
+            vcodec: str = None,
+            acodec: str = None,
+            extra_opts: str = ""
     ):
         self.name = name
         self.params = params
         self.container_defaults = container_defaults or []
         self.even_res = even_res
+        self.vcodec = vcodec
+        self.acodec = acodec
 
     def get_param_values(self, param: str):
         return self.params.get(param)
@@ -19,6 +24,7 @@ class Codec:
 
     def __repr__(self):
         return f"<Codec {self.name}>"
+
 
 
 # -------------------
@@ -36,7 +42,9 @@ vp9 = Codec(
         "passes": [1, 2],  # One-Pass / Two-Pass
         "container": ["webm", "mkv"]
     },
-    even_res=True
+    even_res=True,
+    vcodec="libvpx-vp9",
+    acodec="libopus"
 )
 
 # -------------------
@@ -53,7 +61,9 @@ svt_av1 = Codec(
         "passes": [1, 2],
         "container": ["mkv", "mp4", "webm"]
     },
-    even_res=False
+    even_res=False,
+    vcodec="libsvtav1",
+    acodec="aac"
 )
 
 # -------------------
@@ -71,5 +81,7 @@ hevc265 = Codec(
         "passes": [1, 2],
         "container": ["mp4", "mkv", "mov", "ts"]
     },
-    even_res=True
+    even_res=True,
+    vcodec="libx265",
+    acodec="aac"
 )
