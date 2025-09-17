@@ -1,3 +1,7 @@
+import json
+import os
+
+
 class ResolutionFixer:
     @staticmethod
     def pad():
@@ -29,8 +33,6 @@ class ResolutionFixer:
         except (ValueError, AttributeError):
             return None
 
-import json
-import os
 
 def load_defaults(codec_name: str) -> dict:
     """
@@ -45,3 +47,61 @@ def load_defaults(codec_name: str) -> dict:
         all_defaults = json.load(f)
 
     return all_defaults.get(codec_name, {})
+
+
+def create_defaults_json_if_missing():
+    """
+    Создаёт defaults.json с базовыми значениями кодеков,
+    если файл не найден в корне проекта.
+    """
+    script_dir = os.path.dirname(__file__)
+    json_path = os.path.join(script_dir, "defaults.json")
+
+    if os.path.exists(json_path):
+        return  # Файл уже есть, ничего не делаем
+
+    defaults = {
+        "vp9": {
+            "crf": 35,
+            "scale": "don't change",
+            "preset": "good",
+            "fps": "don't change",
+            "pixel": "yuv420p",
+            "passes": "Two-Pass",
+            "container": "webm"
+        },
+        "svt-av1": {
+            "crf": 28,
+            "scale": "don't change",
+            "preset": "8",
+            "fps": "don't change",
+            "pixel": "yuv420p",
+            "passes": "Two-Pass",
+            "container": "mkv"
+        },
+        "hevc265": {
+            "crf": 23,
+            "scale": "don't change",
+            "preset": "medium",
+            "fps": "don't change",
+            "pixel": "yuv420p",
+            "passes": "Two-Pass",
+            "container": "mp4"
+        }
+    }
+
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(defaults, f, indent=4)
+    print(f"Created defaults.json at {json_path}")
+
+
+import my_codecs
+
+def supported_codecs() -> list:
+    """
+    Возвращает список объектов Codec, доступных в my_codecs.
+    """
+    return [
+        obj for name, obj in vars(my_codecs).items()
+        if isinstance(obj, my_codecs.Codec)
+    ]
