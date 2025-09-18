@@ -31,7 +31,7 @@ class Commander:
         vf_list = []
 
         scale = self.settings.get("scale")
-        if scale:
+        if scale and scale != "don't change":
             vf_list.append(f"scale={scale}")
 
         scale_fix = self.settings.get("scale_fix")
