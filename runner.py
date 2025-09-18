@@ -52,7 +52,7 @@ def main(preselected_codec=None):
     cmd_builder = commander.Commander(codec,settings)
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    output_dir = os.path.join(script_dir, "output")
+    output_dir = os.path.join(script_dir, "output")  # тут можно поменять папку выходных файлов
     os.makedirs(output_dir, exist_ok=True)
 
     start_time = datetime.now()
