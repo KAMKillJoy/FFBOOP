@@ -38,7 +38,7 @@ vp9 = Codec(
         "preset": ["realtime", "good", "best"],
         "pixel_format": ["yuv420p", "yuv422p", "yuv444p"],
         "passes": ["One-Pass", "Two-Pass"],
-        "container": ["webm", "mkv"]
+        "container": ["webm", "mkv", "mp4"]
     },
     even_res=True,
     vcodec="libvpx-vp9",
