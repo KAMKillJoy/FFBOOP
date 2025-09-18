@@ -36,7 +36,7 @@ vp9 = Codec(
         "scale": None,  # свободный ввод
         "fps": None,  # свободный ввод
         "preset": ["realtime", "good", "best"],
-        "pixel_format": ["yuv420p", "yuv422p", "yuv444p"],
+        "pixel_format": ["yuv420p", "yuv422p", "yuv444p", "don't change"],
         "passes": ["One-Pass", "Two-Pass"],
         "container": ["webm", "mkv", "mp4"],
         "audio bitrate": [6, 510]
@@ -56,7 +56,7 @@ svt_av1 = Codec(
         "scale": None,
         "fps": None,
         "preset": list(range(0, 10)),  # 0–9
-        "pixel_format": ["yuv420p", "yuv422p", "yuv444p"],
+        "pixel_format": ["yuv420p", "yuv422p", "yuv444p", "don't change"],
         "passes": ["One-Pass", "Two-Pass"],
         "container": ["mkv", "mp4", "webm"],
         "audio bitrate": [6, 510]
@@ -77,7 +77,7 @@ hevc265 = Codec(
         "fps": None,
         "preset": ["ultrafast", "superfast", "veryfast", "faster", "fast",
                    "medium", "slow", "slower", "veryslow", "placebo"],
-        "pixel_format": ["yuv420p", "yuv422p", "yuv444p"],
+        "pixel_format": ["yuv420p", "yuv422p", "yuv444p", "don't change"],
         "passes": ["One-Pass", "Two-Pass"],
         "container": ["mp4", "mkv", "mov", "ts"],
         "audio bitrate": [6, 510]
