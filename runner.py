@@ -40,7 +40,7 @@ def main(preselected_codec=None):
         codec = choose_codec()
 
     set_terminal_title(f"FF8MBOOP - {codec.name}")
-    
+
     # Загружаем стандартные значения
     settings = load_defaults(codec.name)
 
