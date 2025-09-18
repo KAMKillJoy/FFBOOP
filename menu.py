@@ -162,7 +162,7 @@ class Menu:
                     self.settings["crf"] = val_int
                     self.clear_screen()
                     break
-                elif not (min_crf <= val_int <= max_crf):
+                else:
                     self.clear_screen()
                 print(f"Invalid input, must be in range {min_crf}-{max_crf}")
             except ValueError:
@@ -183,7 +183,7 @@ class Menu:
                     self.settings["audio bitrate"] = val_int
                     self.clear_screen()
                     break
-                elif not (min_ab <= val_int <= max_ab):
+                else:
                     self.clear_screen()
                     print(f"Invalid input, must be in range {min_ab}-{max_ab}")
 
