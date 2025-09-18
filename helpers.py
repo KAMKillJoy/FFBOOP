@@ -9,7 +9,7 @@ class ResolutionFixer:
 
     @staticmethod
     def crop():
-        return "scale=trunc(iw/2)*2:trunc(ih/2)*2"
+        return "crop=trunc(iw/2)*2:trunc(ih/2)*2"
 
     @staticmethod
     def validate_resolution(width: int, height: int, even: bool = True) -> bool:
