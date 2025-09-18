@@ -51,6 +51,8 @@ class Menu:
                 self.handle_crf()
             elif param == "audio bitrate":
                 self.handle_audio_bitrate()
+            elif param == "fps":
+                self.handle_fps()
             else:
                 self.handle_param(param)
 
@@ -169,6 +171,24 @@ class Menu:
             except ValueError:
                 print("Invalid input, must be a number")
 
+    def handle_fps(self):
+        self.clear_screen()
+        while True:
+            val = input(
+                'Input FPS (empty to go back, "r" to reset):').strip()
+            if val == "":
+                break
+            elif val.lower() == "r":
+                self.settings["fps"] = "don't change"
+                break
+            try:
+                val_int = int(val)
+                self.settings["fps"] = val_int
+                self.clear_screen()
+                break
+            except ValueError:
+                self.clear_screen()
+                print("Invalid input, must be a number or 'r'")
     @staticmethod
     def clear_screen():
         os.system('cls' if os.name == 'nt' else 'clear')
