@@ -66,7 +66,7 @@ def create_defaults_json_if_missing():
             "scale": "don't change",
             "preset": "good",
             "fps": "don't change",
-            "pixel": "yuv420p",
+            "pixel_format": "yuv420p",
             "passes": "Two-Pass",
             "container": "webm"
         },
@@ -75,16 +75,16 @@ def create_defaults_json_if_missing():
             "scale": "don't change",
             "preset": "8",
             "fps": "don't change",
-            "pixel": "yuv420p",
+            "pixel_format": "yuv420p",
             "passes": "Two-Pass",
             "container": "mkv"
         },
-        "hevc265": {
+        "hevc": {
             "crf": 23,
             "scale": "don't change",
             "preset": "medium",
             "fps": "don't change",
-            "pixel": "yuv420p",
+            "pixel_format": "yuv420p",
             "passes": "Two-Pass",
             "container": "mp4"
         }
