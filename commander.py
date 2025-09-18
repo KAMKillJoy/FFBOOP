@@ -72,5 +72,5 @@ class Commander:
                 f'-c:a {acodec} -b:a {audio_bitrate}k "{output_file}_2pass.{container}"'
             )
         else:
-            raise ValueError(f"Passes should be one of 'OnePass', 'TwoPass'")
+            raise ValueError(f"Passes should be one of 'One-Pass', 'Two-Pass'")
         return cmd
