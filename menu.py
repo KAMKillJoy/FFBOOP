@@ -55,6 +55,7 @@ class Menu:
                 self.handle_param(param)
 
     def handle_param(self, param):
+        self.clear_screen()
         allowed = self.codec.params[param]
         if allowed is None:
             # свободный ввод
@@ -65,6 +66,7 @@ class Menu:
         else:
             # список вариантов
             while True:
+                self.clear_screen()
                 print(f"Choose {param} (empty to go back):")
                 for i, v in enumerate(allowed, 1):
                     print(f"{i}. {v}")
@@ -80,6 +82,7 @@ class Menu:
 
     def handle_scale(self):
         while True:
+            self.clear_screen()
             print("Scale options (empty to go back):")
             print("1. Height")
             print("2. Width")
@@ -89,29 +92,32 @@ class Menu:
             if choice == "":
                 break
             elif choice == "1":
+                self.clear_screen()
                 val = input("Enter height value (Width adjusts automatically): ").strip()
                 if val != "":
                     self.settings["scale"] = f"-1:{val}"
                     break
             elif choice == "2":
+                self.clear_screen()
                 val = input("Enter width value (Height adjusts automatically): ").strip()
                 if val != "":
                     self.settings["scale"] = f"{val}:-1"
                     break
             elif choice == "3":
+                self.clear_screen()
                 val = input("Enter resolution (WxH): ").strip()
                 if val != "":
                     self.settings["scale"] = val
                     break
             elif choice.lower() == "r":
                 self.settings["scale"] = None
-                self.settings.pop("scale_filter", None)
                 break
             else:
                 print("Invalid choice, try again.")
 
     def handle_fix_resolution(self):
         while True:
+            self.clear_screen()
             print("Fix resolution options:")
             print("1. Add 1px padding (pad)")
             print("2. Crop 1px (crop)")
@@ -134,6 +140,7 @@ class Menu:
     def handle_crf(self):
         min_crf, max_crf = self.codec.params["crf"]
         while True:
+            self.clear_screen()
             val = input(
                 f'Input CRF in range {min_crf} - {max_crf} (empty to go back):').strip()
             if val == "":
@@ -149,6 +156,7 @@ class Menu:
     def handle_audio_bitrate(self):
         min_ab, max_ab = self.codec.params["audio bitrate"]
         while True:
+            self.clear_screen()
             val = input(
                 f'Enter audio bitrate (kbps, numbers only, {min_ab}-{max_ab}) (empty to go back):').strip()
             if val == "":

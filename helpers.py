@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 
 
 class ResolutionFixer:
@@ -109,3 +110,11 @@ def supported_codecs() -> list:
         obj for name, obj in vars(my_codecs).items()
         if isinstance(obj, my_codecs.Codec)
     ]
+
+
+def set_terminal_title(title: str):
+    if os.name == "nt":  # Windows
+        os.system(f"title {title}")
+    else:  # Linux / macOS
+        sys.stdout.write(f"\033]0;{title}\007")
+        sys.stdout.flush()

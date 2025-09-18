@@ -4,7 +4,7 @@ import sys
 from datetime import datetime
 
 import commander
-from helpers import load_defaults, create_defaults_json_if_missing, supported_codecs
+from helpers import load_defaults, create_defaults_json_if_missing, supported_codecs, set_terminal_title
 from menu import Menu
 
 
@@ -25,6 +25,7 @@ def choose_codec():
 
 
 def main(preselected_codec=None):
+    set_terminal_title("FF8MBOOP")
     create_defaults_json_if_missing()
 
     files = sys.argv[1:]
@@ -38,6 +39,8 @@ def main(preselected_codec=None):
     else:
         codec = choose_codec()
 
+    set_terminal_title(f"FF8MBOOP - {codec.name}")
+    
     # Загружаем стандартные значения
     settings = load_defaults(codec.name)
 
