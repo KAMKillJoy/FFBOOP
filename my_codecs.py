@@ -52,14 +52,14 @@ vp9 = Codec(
 svt_av1 = Codec(
     name="svt-av1",
     params={
-        "crf": [0, 63],
-        "scale": None,
-        "fps": None,
+        "crf": [0, 63],  # обрабатывается уникальным методом. Список содержит max и min значение.
+        "scale": "",  # обрабатывается уникальным методом. Значение параметра неважно.
+        "fps": "",  # обрабатывается уникальным методом. Значение параметра неважно.
         "preset": list(range(0, 10)),  # 0–9
         "pixel_format": ["yuv420p", "yuv422p", "yuv444p", "don't change"],
         "passes": ["One-Pass", "Two-Pass"],
         "container": ["mkv", "mp4", "webm"],
-        "audio bitrate": [6, 510]
+        "audio bitrate": [6, 510]  # обрабатывается уникальным методом. Список содержит max и min значение.
     },
     even_res=False,
     vcodec="libsvtav1",
@@ -72,15 +72,15 @@ svt_av1 = Codec(
 hevc265 = Codec(
     name="hevc",
     params={
-        "crf": [0, 51],
-        "scale": None,
-        "fps": None,
+        "crf": [0, 51],  # обрабатывается уникальным методом. Список содержит max и min значение.
+        "scale": "",  # обрабатывается уникальным методом. Значение параметра неважно.
+        "fps": "",  # обрабатывается уникальным методом. Значение параметра неважно.
         "preset": ["ultrafast", "superfast", "veryfast", "faster", "fast",
                    "medium", "slow", "slower", "veryslow", "placebo"],
         "pixel_format": ["yuv420p", "yuv422p", "yuv444p", "don't change"],
         "passes": ["One-Pass", "Two-Pass"],
         "container": ["mp4", "mkv", "mov", "ts"],
-        "audio bitrate": [6, 510]
+        "audio bitrate": [6, 510]  # обрабатывается уникальным методом. Список содержит max и min значение.
     },
     even_res=True,
     vcodec="libx265",
