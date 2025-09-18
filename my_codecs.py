@@ -32,14 +32,14 @@ class Codec:
 vp9 = Codec(
     name="vp9",
     params={
-        "crf": [0, 63],
-        "scale": None,  # свободный ввод
-        "fps": None,  # свободный ввод
+        "crf": [0, 63],  # обрабатывается уникальным методом. Список содержит max и min значение.
+        "scale": None,  # обрабатывается уникальным методом.
+        "fps": None,  # обрабатывается уникальным методом.
         "preset": ["realtime", "good", "best"],
         "pixel_format": ["yuv420p", "yuv422p", "yuv444p", "don't change"],
         "passes": ["One-Pass", "Two-Pass"],
         "container": ["webm", "mkv", "mp4"],
-        "audio bitrate": [6, 510]
+        "audio bitrate": [6, 510]  # обрабатывается уникальным методом. Список содержит max и min значение.
     },
     even_res=True,
     vcodec="libvpx-vp9",
