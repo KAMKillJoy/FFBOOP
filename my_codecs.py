@@ -38,7 +38,8 @@ vp9 = Codec(
         "preset": ["realtime", "good", "best"],
         "pixel_format": ["yuv420p", "yuv422p", "yuv444p"],
         "passes": ["One-Pass", "Two-Pass"],
-        "container": ["webm", "mkv", "mp4"]
+        "container": ["webm", "mkv", "mp4"],
+        "audio bitrate": [6, 510]
     },
     even_res=True,
     vcodec="libvpx-vp9",
@@ -57,11 +58,12 @@ svt_av1 = Codec(
         "preset": list(range(0, 10)),  # 0–9
         "pixel_format": ["yuv420p", "yuv422p", "yuv444p"],
         "passes": ["One-Pass", "Two-Pass"],
-        "container": ["mkv", "mp4", "webm"]
+        "container": ["mkv", "mp4", "webm"],
+        "audio bitrate": [6, 510]
     },
     even_res=False,
     vcodec="libsvtav1",
-    acodec="aac"
+    acodec="libopus"
 )
 
 # -------------------
@@ -77,9 +79,10 @@ hevc265 = Codec(
                    "medium", "slow", "slower", "veryslow", "placebo"],
         "pixel_format": ["yuv420p", "yuv422p", "yuv444p"],
         "passes": ["One-Pass", "Two-Pass"],
-        "container": ["mp4", "mkv", "mov", "ts"]
+        "container": ["mp4", "mkv", "mov", "ts"],
+        "audio bitrate": [6, 510]
     },
     even_res=True,
     vcodec="libx265",
-    acodec="aac"
+    acodec="libopus"
 )

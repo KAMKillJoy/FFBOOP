@@ -19,12 +19,13 @@ class Commander:
         """
 
         filename, ext = os.path.splitext(os.path.basename(file))
-        container = self.settings.get("container", "mp4")
+        container = self.settings.get("container")
         crf = self.settings.get("crf")
         preset = self.settings.get("preset")
         fps = self.settings.get("fps")
         pixel_format = self.settings.get("pixel_format")
         passes = self.settings.get("passes")
+        audio_bitrate = int(self.settings.get("audio bitrate"))
 
         # Видеофильтры
         vf_list = []
@@ -59,7 +60,7 @@ class Commander:
             cmd = (
                 f'ffmpeg -y -i "{file}" {vf} -c:v {vcodec} '
                 f'-preset {str(preset)} -crf {str(crf)} '
-                f'-c:a {acodec} -b:a 128k "{output_file}_1pass.{container}"'
+                f'-c:a {acodec} -b:a {audio_bitrate}k "{output_file}_1pass.{container}"'
             )
         elif passes == "Two_Pass":
             nol = "NUL" if os.name == "nt" else "/dev/null"
@@ -68,7 +69,7 @@ class Commander:
                 f'-preset {str(preset)} -crf {str(crf)} -pass 1 -an -f null {nol} && '
                 f'ffmpeg -y -i "{file}" {vf} -c:v {vcodec} '
                 f'-preset {str(preset)} -crf {str(crf)} -pass 2 '
-                f'-c:a {acodec} -b:a 128k "{output_file}_2pass.{container}"'
+                f'-c:a {acodec} -b:a {audio_bitrate}k "{output_file}_2pass.{container}"'
             )
         else:
             raise ValueError(f"Passes should be one of 'OnePass', 'TwoPass'")

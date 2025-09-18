@@ -68,7 +68,8 @@ def create_defaults_json_if_missing():
             "fps": "don't change",
             "pixel_format": "yuv420p",
             "passes": "Two-Pass",
-            "container": "webm"
+            "container": "webm",
+            "audio bitrate": 128
         },
         "svt-av1": {
             "crf": 28,
@@ -77,7 +78,8 @@ def create_defaults_json_if_missing():
             "fps": "don't change",
             "pixel_format": "yuv420p",
             "passes": "Two-Pass",
-            "container": "mkv"
+            "container": "mkv",
+            "audio bitrate": 128
         },
         "hevc": {
             "crf": 23,
@@ -86,7 +88,8 @@ def create_defaults_json_if_missing():
             "fps": "don't change",
             "pixel_format": "yuv420p",
             "passes": "Two-Pass",
-            "container": "mp4"
+            "container": "mp4",
+            "audio bitrate": 128
         }
     }
 

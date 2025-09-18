@@ -49,6 +49,8 @@ class Menu:
                 self.handle_scale()
             elif param == "crf":
                 self.handle_crf()
+            elif param == "audio bitrate":
+                self.handle_audio_bitrate()
             else:
                 self.handle_param(param)
 
@@ -143,6 +145,22 @@ class Menu:
                     break
             except ValueError:
                 print("Invalid input, must be a number")
+
+    def handle_audio_bitrate(self):
+        min_ab, max_ab = self.codec.params["audio bitrate"]
+        while True:
+            val = input(
+                f'Enter audio bitrate (kbps, numbers only, {min_ab}-{max_ab}) (empty to go back):').strip()
+            if val == "":
+                break
+            try:
+                val_int = int(val)
+                if min_ab <= val_int <= max_ab:
+                    self.settings["audio bitrate"] = val_int
+                    break
+            except ValueError:
+                print("Invalid input, must be a number")
+
 
     @staticmethod
     def clear_screen():

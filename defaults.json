@@ -6,7 +6,8 @@
     "fps": "don't change",
     "pixel_format": "yuv420p",
     "passes": "Two-Pass",
-    "container": "mp4"
+    "container": "mp4",
+    "audio bitrate": 128
   },
   "svt-av1": {
     "crf": 35,
@@ -15,7 +16,8 @@
     "fps": "don't change",
     "pixel_format": "yuv420p",
     "passes": "One-Pass",
-    "container": "mp4"
+    "container": "mp4",
+    "audio bitrate": 128
   },
   "hevc": {
     "crf": 23,
@@ -24,6 +26,7 @@
     "fps": "don't change",
     "pixel_format": "yuv420p",
     "passes": "Two-Pass",
-    "container": "mp4"
+    "container": "mp4",
+    "audio bitrate": 128
   }
 }
