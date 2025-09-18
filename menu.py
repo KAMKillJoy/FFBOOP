@@ -130,14 +130,19 @@ class Menu:
                 print("Invalid choice, try again.")
 
     def handle_crf(self):
+        min_crf, max_crf = self.codec.params["crf"]
         while True:
             val = input(
-                f'Input CRF in range {self.codec.params["crf"][0]} - {self.codec.params["crf"][1]} (empty to go back):').strip()
-            if int(val) in range(self.codec.params["crf"][0], self.codec.params["crf"][1] + 1):
-                self.settings["crf"] = val
+                f'Input CRF in range {min_crf} - {max_crf} (empty to go back):').strip()
+            if val == "":
                 break
-            elif val == "":
-                break
+            try:
+                val_int = int(val)
+                if min_crf <= val_int <= max_crf:
+                    self.settings["crf"] = val_int
+                    break
+            except ValueError:
+                print("Invalid input, must be a number")
 
     @staticmethod
     def clear_screen():
