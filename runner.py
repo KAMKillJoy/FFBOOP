@@ -49,7 +49,7 @@ def main(preselected_codec=None):
     menu.show()
 
     # Commander для генерации команд
-    cmd_builder = commander.Commander(codec,settings)
+    cmd_builder = commander.Commander(codec, settings)
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
     output_dir = os.path.join(script_dir, "output")  # тут можно поменять папку выходных файлов

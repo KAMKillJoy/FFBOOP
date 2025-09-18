@@ -100,6 +100,7 @@ def create_defaults_json_if_missing():
 
 import my_codecs
 
+
 def supported_codecs() -> list:
     """
     Возвращает список объектов Codec, доступных в my_codecs.

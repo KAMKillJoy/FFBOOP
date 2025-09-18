@@ -161,7 +161,6 @@ class Menu:
             except ValueError:
                 print("Invalid input, must be a number")
 
-
     @staticmethod
     def clear_screen():
         os.system('cls' if os.name == 'nt' else 'clear')
