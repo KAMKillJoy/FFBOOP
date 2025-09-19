@@ -1,0 +1,32 @@
+{
+  "vp9": {
+    "crf": 35,
+    "scale": "don't change",
+    "preset": "good",
+    "fps": "don't change",
+    "pixel_format": "yuv420p",
+    "passes": "Two-Pass",
+    "container": "mp4",
+    "audio bitrate": 128
+  },
+  "svt-av1": {
+    "crf": 35,
+    "scale": "don't change",
+    "preset": "6",
+    "fps": "don't change",
+    "pixel_format": "yuv420p",
+    "passes": "One-Pass",
+    "container": "mp4",
+    "audio bitrate": 128
+  },
+  "hevc": {
+    "crf": 23,
+    "scale": "don't change",
+    "preset": "medium",
+    "fps": "don't change",
+    "pixel_format": "yuv420p",
+    "passes": "Two-Pass",
+    "container": "mp4",
+    "audio bitrate": 128
+  }
+}

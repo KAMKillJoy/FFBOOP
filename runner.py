@@ -4,7 +4,7 @@ import sys
 from datetime import datetime
 
 import commander
-from helpers import load_defaults, create_defaults_json_if_missing, supported_codecs, set_terminal_title
+from helpers import supported_codecs, set_terminal_title, load_options, create_defaults_json_if_missing
 from menu import Menu
 
 
@@ -42,7 +42,7 @@ def main(preselected_codec=None):
     set_terminal_title(f"FF8MBOOP - {codec.name}")
 
     # Загружаем стандартные значения
-    settings = load_defaults(codec.name)
+    settings = load_options(codec.name)
 
     if codec.even_res and "scale_fix" not in settings:
         settings["scale_fix"] = "pad"

@@ -1,5 +1,6 @@
 import json
 import os
+import shutil
 import sys
 
 import my_codecs
@@ -47,6 +48,22 @@ def load_defaults(codec_name: str) -> dict:
         raise FileNotFoundError(f"{json_path} not found")
 
     with open(json_path, "r", encoding="utf-8") as f:
+        all_defaults = json.load(f)
+
+    return all_defaults.get(codec_name, {})
+
+
+def load_options(codec_name: str) -> dict:
+    script_dir = os.path.dirname(__file__)
+    options_path = os.path.join(script_dir, "options.json")
+
+    if not os.path.exists(options_path):
+        defaults_path = os.path.join(script_dir, "defaults.json")
+        if not os.path.exists(defaults_path):
+            raise FileNotFoundError(f"{defaults_path} not found")
+        shutil.copyfile(defaults_path, options_path)
+
+    with open(options_path, "r", encoding="utf-8") as f:
         all_defaults = json.load(f)
 
     return all_defaults.get(codec_name, {})
