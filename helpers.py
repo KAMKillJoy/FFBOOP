@@ -2,6 +2,8 @@ import json
 import os
 import sys
 
+import my_codecs
+
 
 class ResolutionFixer:
     @staticmethod
@@ -97,9 +99,6 @@ def create_defaults_json_if_missing():
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(defaults, f, indent=4)
     print(f"Created defaults.json at {json_path}")
-
-
-import my_codecs
 
 
 def supported_codecs() -> list:
