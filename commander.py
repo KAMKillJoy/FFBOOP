@@ -12,29 +12,16 @@ class Commander:
         self.codec = codec
         self.settings = settings
 
-    def build_ffmpeg_command(self, file: str, output_dir) -> str:
-        """
-        Генерация ffmpeg команды для одного файла с учётом настроек.
-        Универсальная для любого кодека, использует codec.vcodec/acodec.
-        """
-
-        filename, ext = os.path.splitext(os.path.basename(file))
-        container = self.settings.get("container")
-        crf = self.settings.get("crf")
-        preset = self.settings.get("preset")
+    def __build_vf_list(self):
+        vf_list = []
         fps = self.settings.get("fps")
         pixel_format = self.settings.get("pixel_format")
-        passes = self.settings.get("passes")
-        audio_bitrate = int(self.settings.get("audio bitrate"))
-
-        # Видеофильтры
-        vf_list = []
-
         scale = self.settings.get("scale")
+        scale_fix = self.settings.get("scale_fix")
+
         if scale and scale != "don't change":
             vf_list.append(f"scale={scale}")
 
-        scale_fix = self.settings.get("scale_fix")
         if scale_fix:
             if scale_fix == "pad":
                 scale_fix = helpers.ResolutionFixer.pad()
@@ -46,10 +33,28 @@ class Commander:
 
         if fps and fps != "don't change":
             vf_list.append(f"fps={fps}")
+
         if pixel_format and pixel_format != "don't change":
             vf_list.append(f"format={pixel_format}")
 
         vf = "-vf \"" + ",".join(vf_list) + "\"" if vf_list else ""
+
+        return vf
+
+    def build_ffmpeg_command(self, file: str, output_dir) -> str:
+        """
+        Генерация ffmpeg команды для одного файла с учётом настроек.
+        Универсальная для любого кодека, использует codec.vcodec/acodec.
+        """
+
+        filename, ext = os.path.splitext(os.path.basename(file))
+        crf = self.settings.get("crf")
+        preset = self.settings.get("preset")
+        container = self.settings.get("container")
+        passes = self.settings.get("passes")
+        audio_bitrate = int(self.settings.get("audio bitrate"))
+
+        vf = self.__build_vf_list()
 
         output_file = os.path.join(output_dir, f"{filename}_{self.codec.name}_q{crf}")
 
