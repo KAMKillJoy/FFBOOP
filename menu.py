@@ -56,7 +56,7 @@ class Menu:
             else:
                 self.__handle_param(param)
 
-    def __handle_param(self, param):
+    def __handle_param(self, param: str):
         Menu.clear_screen()
         allowed = self.codec.params[param]
         if allowed is None:

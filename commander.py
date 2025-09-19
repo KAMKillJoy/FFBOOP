@@ -12,7 +12,7 @@ class Commander:
         self.codec = codec
         self.settings = settings
 
-    def __build_vf_list(self):
+    def __build_vf_list(self) -> str:
         vf_list = []
         fps = self.settings.get("fps")
         pixel_format = self.settings.get("pixel_format")
