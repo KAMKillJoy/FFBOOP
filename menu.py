@@ -12,7 +12,7 @@ class Menu:
 
     def show(self):
         while True:
-            self.clear_screen()
+            Menu.clear_screen()
             print("Select option:")
 
             options = list(self.codec.params.keys())
@@ -57,7 +57,7 @@ class Menu:
                 self.__handle_param(param)
 
     def __handle_param(self, param):
-        self.clear_screen()
+        Menu.clear_screen()
         allowed = self.codec.params[param]
         if allowed is None:
             # свободный ввод
@@ -68,7 +68,7 @@ class Menu:
         else:
             # список вариантов
             while True:
-                self.clear_screen()
+                Menu.clear_screen()
                 print(f"Choose {param} (empty to go back):")
                 for i, v in enumerate(allowed, 1):
                     print(f"{i}. {v}")
@@ -83,7 +83,7 @@ class Menu:
                     print("Invalid choice, try again.")
 
     def __handle_scale(self):
-        self.clear_screen()
+        Menu.clear_screen()
         while True:
             print("Scale options (empty to go back):")
             print("1. Height")
@@ -92,43 +92,43 @@ class Menu:
             print("r. Reset to original")
             choice = input("> ").strip()
             if choice == "":
-                self.clear_screen()
+                Menu.clear_screen()
                 break
             elif choice == "1":
-                self.clear_screen()
+                Menu.clear_screen()
                 val = input("Enter height value (Width adjusts automatically): ").strip()
                 if val != "":
                     self.settings["scale"] = f"-1:{val}"
-                    self.clear_screen()
+                    Menu.clear_screen()
                     break
-                self.clear_screen()
+                Menu.clear_screen()
             elif choice == "2":
-                self.clear_screen()
+                Menu.clear_screen()
                 val = input("Enter width value (Height adjusts automatically): ").strip()
                 if val != "":
                     self.settings["scale"] = f"{val}:-1"
-                    self.clear_screen()
+                    Menu.clear_screen()
                     break
-                self.clear_screen()
+                Menu.clear_screen()
             elif choice == "3":
-                self.clear_screen()
+                Menu.clear_screen()
                 val = input("Enter resolution (W:H): ").strip()
                 if val != "":
                     self.settings["scale"] = val
-                    self.clear_screen()
+                    Menu.clear_screen()
                     break
-                self.clear_screen()
+                Menu.clear_screen()
             elif choice.lower() == "r":
                 self.settings["scale"] = None
-                self.clear_screen()
+                Menu.clear_screen()
                 break
             else:
-                self.clear_screen()
+                Menu.clear_screen()
                 print("Invalid choice, try again.")
 
     def __handle_fix_resolution(self):
         while True:
-            self.clear_screen()
+            Menu.clear_screen()
             print("Fix resolution options:")
             print("1. Add 1px padding (pad)")
             print("2. Crop 1px (crop)")
@@ -150,7 +150,7 @@ class Menu:
 
     def __handle_crf(self):
         min_crf, max_crf = self.codec.params["crf"]
-        self.clear_screen()
+        Menu.clear_screen()
         while True:
             val = input(
                 f'Input CRF in range {min_crf} - {max_crf} (empty to go back):').strip()
@@ -160,18 +160,18 @@ class Menu:
                 val_int = int(val)
                 if min_crf <= val_int <= max_crf:
                     self.settings["crf"] = val_int
-                    self.clear_screen()
+                    Menu.clear_screen()
                     break
                 else:
-                    self.clear_screen()
+                    Menu.clear_screen()
                 print(f"Invalid input, must be in range {min_crf}-{max_crf}")
             except ValueError:
-                self.clear_screen()
+                Menu.clear_screen()
                 print("Invalid input, must be a number")
 
     def __handle_audio_bitrate(self):
         min_ab, max_ab = self.codec.params["audio bitrate"]
-        self.clear_screen()
+        Menu.clear_screen()
         while True:
             val = input(
                 f'Enter audio bitrate (kbps, numbers only, {min_ab}-{max_ab}) (empty to go back):').strip()
@@ -181,18 +181,18 @@ class Menu:
                 val_int = int(val)
                 if min_ab <= val_int <= max_ab:
                     self.settings["audio bitrate"] = val_int
-                    self.clear_screen()
+                    Menu.clear_screen()
                     break
                 else:
-                    self.clear_screen()
+                    Menu.clear_screen()
                     print(f"Invalid input, must be in range {min_ab}-{max_ab}")
 
             except ValueError:
-                self.clear_screen()
+                Menu.clear_screen()
                 print("Invalid input, must be a number")
 
     def __handle_fps(self):
-        self.clear_screen()
+        Menu.clear_screen()
         while True:
             val = input(
                 'Input FPS (empty to go back, "r" to reset):').strip()
@@ -204,10 +204,10 @@ class Menu:
             try:
                 val_int = int(val)
                 self.settings["fps"] = val_int
-                self.clear_screen()
+                Menu.clear_screen()
                 break
             except ValueError:
-                self.clear_screen()
+                Menu.clear_screen()
                 print("Invalid input, must be a number or 'r'")
 
     @staticmethod
