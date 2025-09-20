@@ -67,7 +67,7 @@ class Commander:
                 f'-preset {str(preset)} -crf {str(crf)} '
                 f'-c:a {acodec} -b:a {audio_bitrate}k "{output_file}_1pass.{container}"'
             )
-        elif passes == "Two_Pass":
+        elif passes == "Two-Pass":
             nol = "NUL" if os.name == "nt" else "/dev/null"
             cmd = (
                 f'ffmpeg -y -i "{file}" {vf} -c:v {vcodec} '
