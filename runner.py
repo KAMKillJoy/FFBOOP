@@ -1,3 +1,4 @@
+import argparse
 import os
 import subprocess
 import sys
@@ -32,8 +33,21 @@ def main(preselected_codec=None, skip_menu: bool = False):
     # Выбор кодека
     if preselected_codec:
         codec = preselected_codec
+    elif args.codec:
+        codec = next((c for c in codecs if c.name.lower() == args.codec.lower()), None)
+        if not codec:
+            print(f"Codec '{args.codec}' not supported.")
+            if not (skip_menu or args.skip_menu):
+                codec = Menu.choose_codec_menu(codecs)
+            else:
+                print("No valid codec selected, exiting.")
+                return
     else:
-        codec = choose_codec()
+        if not (skip_menu or args.skip_menu):
+            codec = Menu.choose_codec_menu(codecs)
+        else:
+            print("No valid codec selected, exiting.")
+            return
 
     set_terminal_title(f"FF8MBOOP - {codec.name}")
 
@@ -44,17 +58,26 @@ def main(preselected_codec=None, skip_menu: bool = False):
         settings["scale_fix"] = "pad"
 
     # Меню для настройки параметров
-    menu = Menu(codec, settings)
-    menu.show()
+    if not (skip_menu or args.skip_menu):
+        menu = Menu(codec, settings)
+        menu.show()
+    else:
+        print("Skipping menu, using settings from options.json")
 
     # Commander для генерации команд
     cmd_builder = commander.Commander(codec, settings)
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    output_dir = os.path.join(script_dir, "output")  # тут можно поменять папку выходных файлов
+    if not args.output_dir:
+        output_dir = os.path.join(script_dir, "output")  # тут можно поменять папку выходных файлов
+    else:
+        output_dir = args.output_dir
+
     os.makedirs(output_dir, exist_ok=True)
 
     start_time = datetime.now()
+
+    Menu.clear_screen()
 
     for file in files:
         if not os.path.exists(file):
