@@ -95,14 +95,16 @@ Constant Rate Factor. Ограничение в 8MB перестало быть 
 
 Все runner'ы поддерживают аргументы запуска:
 
-`positional arguments:
-files Input video files, separated by space
+```
+positional arguments:
+files                     Input video files, separated by space
 
 options:
--h, --help show this help message and exit
---codec CODEC Codec to use (e.g., h264, hevc, vp9)
---skip-menu Skip interactive menu
---output-dir OUTPUT_DIR Override output directory`
+-h, --help                show this help message and exit
+--codec CODEC             Codec to use (e.g., h264, hevc, vp9)
+--skip-menu               Skip interactive menu
+--output-dir OUTPUT_DIR   Override output directory
+```
 
 ### Гибридный вариант
 
