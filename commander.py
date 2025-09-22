@@ -1,10 +1,11 @@
 import os
 
 import helpers
+from my_codecs import Codec
 
 
 class Commander:
-    def __init__(self, codec, settings: dict):
+    def __init__(self, codec: Codec, settings: dict):
         """
         codec    - объект Codec
         settings - словарь с выбранными параметрами из Menu
