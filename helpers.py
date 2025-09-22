@@ -1,6 +1,5 @@
 import json
 import os
-import shutil
 import sys
 
 import my_codecs
@@ -20,9 +19,7 @@ def load_options(codec_name: str) -> dict:
         create_options_json()
 
     with open(options_path, "r", encoding="utf-8") as f:
-        all_defaults = json.load(f)
-
-    return all_defaults.get(codec_name, {})
+        return json.load(f).get(codec_name, {})
 
 
 def create_options_json():
