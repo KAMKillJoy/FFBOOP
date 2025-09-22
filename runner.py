@@ -20,7 +20,6 @@ def parse_args():
 
 def main(preselected_codec=None, skip_menu: bool = False):
     set_terminal_title("FF8MBOOP")
-    create_defaults_json_if_missing()
     args = parse_args()
 
     codecs = supported_codecs()

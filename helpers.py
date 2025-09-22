@@ -53,20 +53,9 @@ def load_options(codec_name: str) -> dict:
 
 
 def create_options_json():
-    if not os.path.exists(defaults_path):
-        raise FileNotFoundError(f"{defaults_path} not found")
-    shutil.copyfile(defaults_path, options_path)
-
-
-def create_defaults_json_if_missing():
     """
-    Создаёт defaults.json с базовыми значениями кодеков,
-    если файл не найден в корне проекта.
+    Создаёт options_json с базовыми значениями кодеков
     """
-
-    if os.path.exists(defaults_path):
-        return  # Файл уже есть, ничего не делаем
-
     defaults = {
         "vp9": {
             "crf": 35,
@@ -100,9 +89,9 @@ def create_defaults_json_if_missing():
         }
     }
 
-    with open(defaults_path, "w", encoding="utf-8") as f:
+    with open(options_path, "w", encoding="utf-8") as f:
         json.dump(defaults, f, indent=4)
-    print(f"Created defaults.json at {defaults_path}")
+    print(f"Created options.json at {options_path}")
 
 
 def supported_codecs() -> list:
