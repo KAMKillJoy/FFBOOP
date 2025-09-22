@@ -38,21 +38,6 @@ class ResolutionFixer:
             return None
 
 
-def load_defaults(codec_name: str) -> dict:
-    """
-    Загружает стандартные значения для указанного кодека из defaults.json.
-    """
-    script_dir = os.path.dirname(__file__)
-    json_path = os.path.join(script_dir, "defaults.json")
-    if not os.path.exists(json_path):
-        raise FileNotFoundError(f"{json_path} not found")
-
-    with open(json_path, "r", encoding="utf-8") as f:
-        all_defaults = json.load(f)
-
-    return all_defaults.get(codec_name, {})
-
-
 script_dir = os.path.dirname(__file__)
 options_path = os.path.join(script_dir, "options.json")
 defaults_path = os.path.join(script_dir, "defaults.json")
