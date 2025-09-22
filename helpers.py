@@ -10,36 +10,9 @@ class ResolutionFixer:
     PAD = "pad=width=ceil(iw/2)*2:height=ceil(ih/2)*2"
     CROP = "crop=trunc(iw/2)*2:trunc(ih/2)*2"
 
-    @staticmethod
-    def validate_resolution(width: int, height: int, even: bool = True) -> bool:
-        """
-        Проверяет, что разрешение корректное.
-        Если even=True — оба значения должны быть чётными.
-        """
-        if not even:
-            return True
-        return width % 2 == 0 and height % 2 == 0
-
-    @staticmethod
-    def parse_resolution(res_str: str) -> tuple[int, int] | None:
-        """
-        Разбирает строку разрешения вида "WxH" или "-1:H" / "W:-1".
-        Возвращает (width, height) как числа или None, если не удалось.
-        """
-        if not res_str:
-            return None
-        try:
-            w_str, h_str = res_str.split(":")
-            width = int(w_str) if w_str != "-1" else -1
-            height = int(h_str) if h_str != "-1" else -1
-            return width, height
-        except (ValueError, AttributeError):
-            return None
-
 
 script_dir = os.path.dirname(__file__)
 options_path = os.path.join(script_dir, "options.json")
-defaults_path = os.path.join(script_dir, "defaults.json")
 
 
 def load_options(codec_name: str) -> dict:
