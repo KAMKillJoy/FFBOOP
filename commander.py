@@ -37,7 +37,7 @@ class Commander:
         if pixel_format and pixel_format != "don't change":
             vf_list.append(f"format={pixel_format}")
 
-        vf = "-vf \"" + ",".join(vf_list) + "\"" if vf_list else ""
+        vf = f'-vf "{",".join(vf_list)}"' if vf_list else ""
 
         return vf
 
