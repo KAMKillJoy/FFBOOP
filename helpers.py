@@ -53,15 +53,14 @@ def load_defaults(codec_name: str) -> dict:
     return all_defaults.get(codec_name, {})
 
 
-def load_options(codec_name: str) -> dict:
-    script_dir = os.path.dirname(__file__)
-    options_path = os.path.join(script_dir, "options.json")
+script_dir = os.path.dirname(__file__)
+options_path = os.path.join(script_dir, "options.json")
+defaults_path = os.path.join(script_dir, "defaults.json")
 
+
+def load_options(codec_name: str) -> dict:
     if not os.path.exists(options_path):
-        defaults_path = os.path.join(script_dir, "defaults.json")
-        if not os.path.exists(defaults_path):
-            raise FileNotFoundError(f"{defaults_path} not found")
-        shutil.copyfile(defaults_path, options_path)
+        create_options_json()
 
     with open(options_path, "r", encoding="utf-8") as f:
         all_defaults = json.load(f)
@@ -69,15 +68,19 @@ def load_options(codec_name: str) -> dict:
     return all_defaults.get(codec_name, {})
 
 
+def create_options_json():
+    if not os.path.exists(defaults_path):
+        raise FileNotFoundError(f"{defaults_path} not found")
+    shutil.copyfile(defaults_path, options_path)
+
+
 def create_defaults_json_if_missing():
     """
     Создаёт defaults.json с базовыми значениями кодеков,
     если файл не найден в корне проекта.
     """
-    script_dir = os.path.dirname(__file__)
-    json_path = os.path.join(script_dir, "defaults.json")
 
-    if os.path.exists(json_path):
+    if os.path.exists(defaults_path):
         return  # Файл уже есть, ничего не делаем
 
     defaults = {
@@ -113,9 +116,9 @@ def create_defaults_json_if_missing():
         }
     }
 
-    with open(json_path, "w", encoding="utf-8") as f:
+    with open(defaults_path, "w", encoding="utf-8") as f:
         json.dump(defaults, f, indent=4)
-    print(f"Created defaults.json at {json_path}")
+    print(f"Created defaults.json at {defaults_path}")
 
 
 def supported_codecs() -> list:
