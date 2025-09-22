@@ -7,13 +7,8 @@ import my_codecs
 
 
 class ResolutionFixer:
-    @staticmethod
-    def pad():
-        return "pad=width=ceil(iw/2)*2:height=ceil(ih/2)*2"
-
-    @staticmethod
-    def crop():
-        return "crop=trunc(iw/2)*2:trunc(ih/2)*2"
+    PAD = "pad=width=ceil(iw/2)*2:height=ceil(ih/2)*2"
+    CROP = "crop=trunc(iw/2)*2:trunc(ih/2)*2"
 
     @staticmethod
     def validate_resolution(width: int, height: int, even: bool = True) -> bool:

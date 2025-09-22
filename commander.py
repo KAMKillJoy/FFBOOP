@@ -24,12 +24,12 @@ class Commander:
 
         if scale_fix:
             if scale_fix == "pad":
-                scale_fix = helpers.ResolutionFixer.pad()
-                vf_list.append(scale_fix)
+                scale_fix_filter = helpers.ResolutionFixer.PAD
+                vf_list.append(scale_fix_filter)
 
-            if scale_fix == "crop":
-                scale_fix = helpers.ResolutionFixer.crop()
-                vf_list.append(scale_fix)
+            elif scale_fix == "crop":
+                scale_fix_filter = helpers.ResolutionFixer.CROP
+                vf_list.append(scale_fix_filter)
 
         if fps and fps != "don't change":
             vf_list.append(f"fps={fps}")
