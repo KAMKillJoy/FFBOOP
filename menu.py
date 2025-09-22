@@ -10,6 +10,21 @@ class Menu:
         self.codec = codec
         self.settings = settings
 
+    @staticmethod
+    def choose_codec_menu(codecs: list):
+        print("Select codec:")
+        for i, c in enumerate(codecs, 1):
+            print(f"{i}. {c.name}")
+        while True:
+            choice = input("> ").strip()
+            try:
+                idx = int(choice) - 1
+                if 0 <= idx < len(codecs):
+                    return codecs[idx]
+            except ValueError:
+                pass
+            print("Invalid choice, try again.")
+
     def show(self):
         while True:
             Menu.clear_screen()

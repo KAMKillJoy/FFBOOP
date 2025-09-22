@@ -8,27 +8,23 @@ from helpers import supported_codecs, set_terminal_title, load_options, create_d
 from menu import Menu
 
 
-def choose_codec():
-    supported = supported_codecs()
-    print("Select codec:")
-    for i, c in enumerate(supported, 1):
-        print(f"{i}. {c.name}")
-    while True:
-        choice = input("> ").strip()
-        try:
-            idx = int(choice) - 1
-            if 0 <= idx < len(supported):
-                return supported[idx]
-        except ValueError:
-            pass
-        print("Invalid choice, try again.")
+def parse_args():
+    parser = argparse.ArgumentParser(description="FF8MBOOP - batch video converter")
+    parser.add_argument("files", nargs="*", help="Input video files, separated by space")
+    parser.add_argument("--codec", type=str, help="Codec to use (e.g., h264, hevc, vp9)")
+    parser.add_argument("--skip-menu", action="store_true", help="Skip interactive menu")
+    parser.add_argument("--output-dir", type=str, help="Override output directory")
+    return parser.parse_args()
 
 
-def main(preselected_codec=None):
+def main(preselected_codec=None, skip_menu: bool = False):
     set_terminal_title("FF8MBOOP")
     create_defaults_json_if_missing()
+    args = parse_args()
 
-    files = sys.argv[1:]
+    codecs = supported_codecs()
+
+    files = args.files
     '''if not files:
         print("No input files. Drag & drop video files onto this script.")
         return'''
