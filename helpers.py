@@ -12,9 +12,13 @@ class ResolutionFixer:
 
     @staticmethod
     def validate_resolution(width: int, height: int, even: bool = True) -> bool:
-        if even:
-            return width % 2 == 0 and height % 2 == 0
-        return True
+        """
+        Проверяет, что разрешение корректное.
+        Если even=True — оба значения должны быть чётными.
+        """
+        if not even:
+            return True
+        return width % 2 == 0 and height % 2 == 0
 
     @staticmethod
     def parse_resolution(res_str: str) -> tuple[int, int] | None:
