@@ -1,4 +1,4 @@
-from my_codecs import vp9
+from internal.my_codecs import vp9
 from runner import main
 
 if __name__ == "__main__":

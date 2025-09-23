@@ -4,9 +4,9 @@ import subprocess
 import sys
 from datetime import datetime
 
-import commander
-from helpers import supported_codecs, set_terminal_title, load_options, create_defaults_json_if_missing
-from menu import Menu
+from internal import commander
+from internal.helpers import supported_codecs, set_terminal_title, load_options, create_defaults_json_if_missing
+from internal.menu import Menu
 
 
 def parse_args():

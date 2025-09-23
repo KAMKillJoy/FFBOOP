@@ -1,4 +1,4 @@
-from my_codecs import svt_av1
+from internal.my_codecs import svt_av1
 from runner import main
 
 if __name__ == "__main__":
