@@ -20,21 +20,24 @@ class Commander:
         scale = self.settings.get("scale")
         scale_fix = self.settings.get("scale_fix")
 
+        # обработка scale
         if scale and scale != "don't change":
             vf_list.append(f"scale={scale}")
 
-        if scale_fix:
-            if scale_fix == "pad":
-                scale_fix_filter = helpers.ResolutionFixer.PAD
-                vf_list.append(scale_fix_filter)
+        # обработка scale_fix
+        if scale_fix == "pad":
+            scale_fix_filter = helpers.ResolutionFixer.PAD
+            vf_list.append(scale_fix_filter)
 
-            elif scale_fix == "crop":
-                scale_fix_filter = helpers.ResolutionFixer.CROP
-                vf_list.append(scale_fix_filter)
+        elif scale_fix == "crop":
+            scale_fix_filter = helpers.ResolutionFixer.CROP
+            vf_list.append(scale_fix_filter)
 
+        # обработка  fps
         if fps and fps != "don't change":
             vf_list.append(f"fps={fps}")
 
+        # обработка pixel_format
         if pixel_format and pixel_format != "don't change":
             vf_list.append(f"format={pixel_format}")
 
