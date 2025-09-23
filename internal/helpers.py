@@ -2,7 +2,7 @@ import json
 import os
 import sys
 
-import my_codecs
+from internal import my_codecs
 
 
 class ResolutionFixer:
@@ -10,7 +10,7 @@ class ResolutionFixer:
     CROP = "crop=trunc(iw/2)*2:trunc(ih/2)*2"
 
 
-script_dir = os.path.dirname(__file__)
+script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
 options_path = os.path.join(script_dir, "options.json")
 
 

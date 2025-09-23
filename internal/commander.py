@@ -1,7 +1,7 @@
 import os
 
-import helpers
-from my_codecs import Codec
+from internal import helpers
+from internal.my_codecs import Codec
 
 
 class Commander:
