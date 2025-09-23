@@ -5,7 +5,7 @@ import sys
 from datetime import datetime
 
 from internal import commander
-from internal.helpers import supported_codecs, set_terminal_title, load_options, create_defaults_json_if_missing
+from internal.helpers import supported_codecs, set_terminal_title, load_options
 from internal.menu import Menu
 
 
