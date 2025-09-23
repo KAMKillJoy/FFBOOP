@@ -1,5 +1,5 @@
 from internal.my_codecs import vp9
-from runner import main
+from converter import main
 
 if __name__ == "__main__":
     main(preselected_codec=vp9, skip_menu=False)
