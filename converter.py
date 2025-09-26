@@ -1,11 +1,10 @@
 import argparse
 import os
 import subprocess
-import sys
 from datetime import datetime
 
 from internal import commander
-from internal.helpers import supported_codecs, set_terminal_title, load_options
+from internal.helpers import supported_codecs, load_options, os_adapter
 from internal.menu import Menu
 
 
@@ -19,7 +18,7 @@ def parse_args():
 
 
 def main(preselected_codec=None, skip_menu: bool = False):
-    set_terminal_title("FF8MBOOP")
+    os_adapter.set_terminal_title("FF8MBOOP")
     args = parse_args()
 
     codecs = supported_codecs()
@@ -48,7 +47,7 @@ def main(preselected_codec=None, skip_menu: bool = False):
             print("No valid codec selected, exiting.")
             return
 
-    set_terminal_title(f"FF8MBOOP - {codec.name}")
+    os_adapter.set_terminal_title(f"FF8MBOOP - {codec.name}")
 
     # Загружаем стандартные значения
     settings = load_options(codec.name)
@@ -95,11 +94,7 @@ def main(preselected_codec=None, skip_menu: bool = False):
     print(f"All done! Total processing time: {total_duration}")
 
     input("Press Enter to open the output folder, or close this window manually.")
-    if os.name == "nt":
-        os.startfile(output_dir)
-    else:
-        opener = "open" if sys.platform == "darwin" else "xdg-open"
-        subprocess.run([opener, output_dir])
+    os_adapter.open_directory(output_dir)
 
 
 if __name__ == "__main__":

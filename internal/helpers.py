@@ -1,5 +1,6 @@
 import json
 import os
+import subprocess
 import sys
 
 from internal import my_codecs
@@ -74,9 +75,48 @@ def supported_codecs() -> list:
     ]
 
 
-def set_terminal_title(title: str):
-    if os.name == "nt":  # Windows
+class PlatformAdapter:
+    NULL_DEVICE: str
+
+    def set_terminal_title(self, title: str):
+        raise NotImplemented
+
+    def open_directory(self, dest: str):
+        raise NotImplemented
+
+    def clear_screen(self):
+        raise NotImplemented
+
+
+class WindowsAdapter(PlatformAdapter):
+    NULL_DEVICE = "NUL"
+
+    def set_terminal_title(self, title: str):
         os.system(f"title {title}")
-    else:  # Linux / macOS
+
+    def open_directory(self, dest: str):
+        os.startfile(dest)
+
+    def clear_screen(self):
+        os.system("cls")
+
+
+class PosixAdapter(PlatformAdapter):
+    NULL_DEVICE = "/dev/null"
+
+    def set_terminal_title(self, title: str):
         sys.stdout.write(f"\033]0;{title}\007")
         sys.stdout.flush()
+
+    def open_directory(self, dest: str):
+        opener = "open" if sys.platform == "darwin" else "xdg-open"
+        subprocess.run([opener, dest])
+
+    def clear_screen(self):
+        os.system("clear")
+
+
+if os.name == "nt":
+    os_adapter = WindowsAdapter()
+else:
+    os_adapter = PosixAdapter()

@@ -1,6 +1,7 @@
 import os
 
 from internal import helpers
+from internal.helpers import os_adapter
 from internal.my_codecs import Codec
 
 
@@ -72,10 +73,9 @@ class Commander:
                 f'-c:a {acodec} -b:a {audio_bitrate}k "{output_file}_1pass.{container}"'
             )
         elif passes == "Two-Pass":
-            nol = "NUL" if os.name == "nt" else "/dev/null"
             cmd = (
                 f'ffmpeg -y -i "{file}" {vf} -c:v {vcodec} '
-                f'-preset {str(preset)} -crf {str(crf)} -pass 1 -an -f null {nol} && '
+                f'-preset {str(preset)} -crf {str(crf)} -pass 1 -an -f null {os_adapter.NULL_DEVICE} && '
                 f'ffmpeg -y -i "{file}" {vf} -c:v {vcodec} '
                 f'-preset {str(preset)} -crf {str(crf)} -pass 2 '
                 f'-c:a {acodec} -b:a {audio_bitrate}k "{output_file}_2pass.{container}"'

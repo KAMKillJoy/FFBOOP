@@ -1,4 +1,4 @@
-import os
+from internal.helpers import os_adapter
 
 
 class Menu:
@@ -227,4 +227,4 @@ class Menu:
 
     @staticmethod
     def clear_screen():
-        os.system('cls' if os.name == 'nt' else 'clear')
+        os_adapter.clear_screen()
