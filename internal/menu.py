@@ -218,8 +218,7 @@ class Menu:
                 self.settings["fps"] = helpers.DONT_CHANGE_STRING
                 break
             try:
-                val_int = int(val)
-                self.settings["fps"] = val_int
+                self.settings["fps"] = int(val)
                 Menu.clear_screen()
                 break
             except ValueError:
