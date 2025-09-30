@@ -1,8 +1,8 @@
 class Codec:
     def __init__(
             self,
-            name: str,
-            params: dict,
+            name: str = None,
+            params: dict = None,
             container_defaults: list[str] = None,
             even_res: bool = True,
             vcodec: str = None,
