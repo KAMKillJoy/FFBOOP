@@ -1,3 +1,4 @@
+from internal import helpers
 from internal.helpers import os_adapter
 
 
@@ -214,7 +215,7 @@ class Menu:
             if val == "":
                 break
             elif val.lower() == "r":
-                self.settings["fps"] = "don't change"
+                self.settings["fps"] = helpers.DONT_CHANGE_STRING
                 break
             try:
                 val_int = int(val)

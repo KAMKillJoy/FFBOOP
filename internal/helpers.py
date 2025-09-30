@@ -5,6 +5,7 @@ import sys
 
 from internal import my_codecs
 
+DONT_CHANGE_STRING = "don't change"
 
 class ResolutionFixer:
     PAD = "pad=width=ceil(iw/2)*2:height=ceil(ih/2)*2"
@@ -30,9 +31,9 @@ def create_options_json():
     defaults = {
         "vp9": {
             "crf": 35,
-            "scale": "don't change",
+            "scale": DONT_CHANGE_STRING,
             "preset": "good",
-            "fps": "don't change",
+            "fps": DONT_CHANGE_STRING,
             "pixel_format": "yuv420p",
             "passes": "Two-Pass",
             "container": "webm",
@@ -40,9 +41,9 @@ def create_options_json():
         },
         "svt-av1": {
             "crf": 28,
-            "scale": "don't change",
+            "scale": DONT_CHANGE_STRING,
             "preset": "8",
-            "fps": "don't change",
+            "fps": DONT_CHANGE_STRING,
             "pixel_format": "yuv420p",
             "passes": "Two-Pass",
             "container": "mkv",
@@ -50,9 +51,9 @@ def create_options_json():
         },
         "hevc": {
             "crf": 23,
-            "scale": "don't change",
+            "scale": DONT_CHANGE_STRING,
             "preset": "medium",
-            "fps": "don't change",
+            "fps": DONT_CHANGE_STRING,
             "pixel_format": "yuv420p",
             "passes": "Two-Pass",
             "container": "mp4",

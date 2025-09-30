@@ -22,7 +22,7 @@ class Commander:
         scale_fix = self.settings.get("scale_fix")
 
         # обработка scale
-        if scale and scale != "don't change":
+        if scale and scale != helpers.DONT_CHANGE_STRING:
             vf_list.append(f"scale={scale}")
 
         # обработка scale_fix
@@ -33,11 +33,11 @@ class Commander:
             vf_list.append(helpers.ResolutionFixer.CROP)
 
         # обработка  fps
-        if fps and fps != "don't change":
+        if fps and fps != helpers.DONT_CHANGE_STRING:
             vf_list.append(f"fps={fps}")
 
         # обработка pixel_format
-        if pixel_format and pixel_format != "don't change":
+        if pixel_format and pixel_format != helpers.DONT_CHANGE_STRING:
             vf_list.append(f"format={pixel_format}")
 
         vf = f'-vf "{",".join(vf_list)}"' if vf_list else ""
