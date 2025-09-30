@@ -6,6 +6,11 @@ import sys
 from internal import my_codecs
 
 DONT_CHANGE_STRING = "don't change"
+"""
+Это значение параметра, которое присваивается параметру кодека, если его не надо менять. 
+Оно же отображается в консольном меню
+"""
+
 
 class ResolutionFixer:
     PAD = "pad=width=ceil(iw/2)*2:height=ceil(ih/2)*2"
