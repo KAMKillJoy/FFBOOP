@@ -27,12 +27,10 @@ class Commander:
 
         # обработка scale_fix
         if scale_fix == "pad":
-            scale_fix_filter = helpers.ResolutionFixer.PAD
-            vf_list.append(scale_fix_filter)
+            vf_list.append(helpers.ResolutionFixer.PAD)
 
         elif scale_fix == "crop":
-            scale_fix_filter = helpers.ResolutionFixer.CROP
-            vf_list.append(scale_fix_filter)
+            vf_list.append(helpers.ResolutionFixer.CROP)
 
         # обработка  fps
         if fps and fps != "don't change":
