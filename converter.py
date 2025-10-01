@@ -5,9 +5,10 @@ import os
 import subprocess
 from datetime import datetime
 
-from internal import commander
-from internal.helpers import supported_codecs, load_options, os_adapter
+from internal import commander, helpers
 from internal.menu import Menu
+
+helpers.check_ffmpeg_installed()
 
 
 def parse_args():
@@ -20,10 +21,10 @@ def parse_args():
 
 
 def main(preselected_codec=None, skip_menu: bool = False):
-    os_adapter.set_terminal_title("FF8MBOOP")
+    helpers.os_adapter.set_terminal_title("FF8MBOOP")
     args = parse_args()
 
-    codecs = supported_codecs()
+    codecs = helpers.supported_codecs()
 
     files = args.files
     '''if not files:
@@ -49,10 +50,10 @@ def main(preselected_codec=None, skip_menu: bool = False):
             print("No valid codec selected, exiting.")
             return
 
-    os_adapter.set_terminal_title(f"FF8MBOOP - {codec.name}")
+    helpers.os_adapter.set_terminal_title(f"FF8MBOOP - {codec.name}")
 
     # Загружаем стандартные значения
-    settings = load_options(codec.name)
+    settings = helpers.load_options(codec.name)
 
     if codec.even_res and "scale_fix" not in settings:
         settings["scale_fix"] = "pad"
@@ -96,7 +97,7 @@ def main(preselected_codec=None, skip_menu: bool = False):
     print(f"All done! Total processing time: {total_duration}")
 
     input("Press Enter to open the output folder, or close this window manually.")
-    os_adapter.open_directory(output_dir)
+    helpers.os_adapter.open_directory(output_dir)
 
 
 if __name__ == "__main__":
