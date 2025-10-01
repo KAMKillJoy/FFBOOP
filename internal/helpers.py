@@ -1,5 +1,6 @@
 import json
 import os
+import shutil
 import subprocess
 import sys
 
@@ -126,3 +127,9 @@ if os.name == "nt":
     os_adapter = WindowsAdapter()
 else:
     os_adapter = PosixAdapter()
+
+
+def check_ffmpeg_installed():
+    if shutil.which("ffmpeg") is None:
+        print("FFmpeg не найден. Установите ffmpeg и убедитесь, что он доступен в PATH.")
+        sys.exit(1)
