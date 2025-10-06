@@ -3,6 +3,7 @@
 import argparse
 import os
 import subprocess
+import sys
 from datetime import datetime
 
 from internal import commander, helpers
@@ -20,11 +21,31 @@ def parse_args():
     return parser.parse_args()
 
 
+args = parse_args()
+codecs = helpers.supported_codecs()
+
+
+def resolve_codec(preselected_codec=None, skip_menu: bool = False):
+    # если кодек выбран при запуске специфичного конвертора
+    if preselected_codec:
+        return preselected_codec
+
+    # Если кодек передан аргументом
+    if args.codec:
+        codec = next((c for c in codecs if c.name.lower() == args.codec.lower()), None)
+        if codec:
+            return codec
+        print(f"Codec '{args.codec}' not supported.")
+
+    # Если не нашли или не передали — спрашиваем у пользователя
+    if not (skip_menu or args.skip_menu):
+        return Menu.choose_codec_menu(codecs)
+
+    sys.exit("No valid codec selected, exiting.")
+
+
 def main(preselected_codec=None, skip_menu: bool = False):
     helpers.os_adapter.set_terminal_title("FF8MBOOP")
-    args = parse_args()
-
-    codecs = helpers.supported_codecs()
 
     files = args.files
     '''if not files:
@@ -32,23 +53,7 @@ def main(preselected_codec=None, skip_menu: bool = False):
         return'''
 
     # Выбор кодека
-    if preselected_codec:
-        codec = preselected_codec
-    elif args.codec:
-        codec = next((c for c in codecs if c.name.lower() == args.codec.lower()), None)
-        if not codec:
-            print(f"Codec '{args.codec}' not supported.")
-            if not (skip_menu or args.skip_menu):
-                codec = Menu.choose_codec_menu(codecs)
-            else:
-                print("No valid codec selected, exiting.")
-                return
-    else:
-        if not (skip_menu or args.skip_menu):
-            codec = Menu.choose_codec_menu(codecs)
-        else:
-            print("No valid codec selected, exiting.")
-            return
+    codec = resolve_codec(preselected_codec, skip_menu=skip_menu)
 
     helpers.os_adapter.set_terminal_title(f"FF8MBOOP - {codec.name}")
 
