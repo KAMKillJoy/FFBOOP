@@ -38,7 +38,7 @@ def resolve_codec(preselected_codec=None, skip_menu: bool = False):
         print(f"Codec '{args.codec}' not supported.")
 
     # Если не нашли или не передали — спрашиваем у пользователя
-    if not (skip_menu or args.skip_menu):
+    if not skip_menu and not args.skip_menu:
         return Menu.choose_codec_menu(codecs)
 
     sys.exit("No valid codec selected, exiting.")
@@ -64,7 +64,7 @@ def main(preselected_codec=None, skip_menu: bool = False):
         settings["scale_fix"] = "pad"
 
     # Меню для настройки параметров
-    if not (skip_menu or args.skip_menu):
+    if not skip_menu and not args.skip_menu:
         menu = Menu(codec, settings)
         menu.show()
     else:
