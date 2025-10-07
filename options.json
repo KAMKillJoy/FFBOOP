@@ -2,7 +2,7 @@
   "vp9": {
     "crf": 35,
     "scale": "don't change",
-    "preset": "good",
+    "deadline": "good",
     "fps": "don't change",
     "pixel_format": "yuv420p",
     "passes": "Two-Pass",

@@ -35,7 +35,7 @@ vp9 = Codec(
         "crf": [0, 63],  # обрабатывается уникальным методом. Список содержит max и min значение.
         "scale": "__handled__",  # обрабатывается уникальным методом. Значение параметра неважно.
         "fps": "__handled__",  # обрабатывается уникальным методом. Значение параметра неважно.
-        "preset": ["realtime", "good", "best"],
+        "deadline": ["realtime", "good", "best"],
         "pixel_format": ["yuv420p", "yuv422p", "yuv444p", "don't change"],
         "passes": ["One-Pass", "Two-Pass"],
         "container": ["webm", "mkv", "mp4"],

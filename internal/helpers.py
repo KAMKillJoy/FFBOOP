@@ -38,7 +38,7 @@ def create_options_json():
         "vp9": {
             "crf": 35,
             "scale": DONT_CHANGE_STRING,
-            "preset": "good",
+            "deadline": "good",
             "fps": DONT_CHANGE_STRING,
             "pixel_format": "yuv420p",
             "passes": "Two-Pass",
