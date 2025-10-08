@@ -68,26 +68,40 @@ class Menu:
 
     def __handle_param(self, param: str):
         Menu.clear_screen()
-        allowed = self.codec.params[param]
-        if allowed is None:
+        param_dict = self.codec.params[param]
+        param_type = param_dict["type"]
+        if param_type == "direct":
             # свободный ввод
-            val = input(f"Enter value for {param} (empty to go back): ").strip()
-            if val == "":
-                return
-            self.settings[param] = val
+            if param_dict.get("resettable"):
+                help_string = param_dict["help"] + helpers.RESETTABLE_HELP_STRING
+            else:
+                help_string = param_dict["help"]
+
+            while True:
+                val = input(help_string.strip())
+
+                if val == "":
+                    return
+                if val.isdigit():
+                    self.settings[param] = val
+                    return
+                if param_dict["resettable"] and (val == "r" or val == "reset"):
+                    self.settings[param] = helpers.DONT_CHANGE_STRING
+                    return
         else:
             # список вариантов
             while True:
+                choices = param_dict["choices"]
                 Menu.clear_screen()
-                print(f"Choose {param} (empty to go back):")
-                for i, v in enumerate(allowed, 1):
-                    print(f"{i}. {v}")
+                print(param_dict.get("help", ""))
+                for i, v in enumerate(choices, 1):
+                    print(f"{i}. {choices[i - 1]["label"]}")
                 choice = input("> ").strip()
                 if choice == "":
                     return
                 try:
                     idx = int(choice) - 1
-                    self.settings[param] = allowed[idx]
+                    self.settings[param] = param_dict["choices"][idx]
                     return
                 except (ValueError, IndexError):
                     print("Invalid choice, try again.")
@@ -157,9 +171,6 @@ class Menu:
                 break
             else:
                 print("Invalid choice, try again.")
-
-
-
 
     @staticmethod
     def clear_screen():
