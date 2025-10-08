@@ -121,7 +121,7 @@ vp9 = Codec(
         "audio bitrate": {
             "type": "direct",
             "label": "Audio Bitrate",
-            "help": "Enter audio bitrate.",
+            "help": "Enter audio bitrate:",
             "flag": "-b:a",
             "context": "audio filters",
             "resettable": False,
