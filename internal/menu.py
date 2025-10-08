@@ -34,7 +34,7 @@ class Menu:
             options = list(self.codec.params.keys())
             for i, param in enumerate(options, 1):
                 val = self.settings.get(param, "not set")
-                print(f"{i}. {self.codec.params[param].get("label")} (Now: {val})")
+                print(f"{i}. {self.codec.params[param].get('label')} (Now: {val})")
 
             # Проверяем Fix resolution
             extra_idx = len(options) + 1
@@ -72,6 +72,9 @@ class Menu:
         param_type = param_dict["type"]
         if param_type == "direct":
             # свободный ввод
+            allowed = param_dict.get("allowed")
+            print(allowed)
+
             if param_dict.get("resettable"):
                 help_string = param_dict["help"] + helpers.RESETTABLE_HELP_STRING
             else:
@@ -82,26 +85,30 @@ class Menu:
 
                 if val == "":
                     return
-                if val.isdigit():
-                    self.settings[param] = val
-                    return
                 if param_dict["resettable"] and (val == "r" or val == "reset"):
                     self.settings[param] = helpers.DONT_CHANGE_STRING
                     return
-        else:
+                if allowed and val in allowed:
+                    self.settings[param] = val
+                    return
+                if not allowed:
+                    self.settings[param] = val
+                    return
+
+        elif param_type == "choice":
             # список вариантов
             while True:
                 choices = param_dict["choices"]
                 Menu.clear_screen()
                 print(param_dict.get("help", ""))
                 for i, v in enumerate(choices, 1):
-                    print(f"{i}. {choices[i - 1]["label"]}")
+                    print(f"{i}. {choices[i - 1]['label']}")
                 choice = input("> ").strip()
                 if choice == "":
                     return
                 try:
                     idx = int(choice) - 1
-                    self.settings[param] = param_dict["choices"][idx]
+                    self.settings[param] = param_dict["choices"][idx]["command_value"]
                     return
                 except (ValueError, IndexError):
                     print("Invalid choice, try again.")

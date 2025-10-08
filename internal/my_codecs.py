@@ -38,7 +38,9 @@ vp9 = Codec(
             # handled - обрабатывается собственным методом
             "label": "CRF",  # имя пункта в меню
             "help": "Quality control value (lower = better)",  # подсказка при выборе пункта меню (при вводе значения)
-            "allowed": range(0, 64),  # допустимые значения
+            "allowed": [str(i) for i in range(0, 64)],  # допустимые значения.
+            # !Участвует в проверке input in allowed, а input всегда строка!
+
             "flag": "-crf",  # флаг этого параметра в строке ffmpeg
             "context": "global",
             # место этого параметра в строке ffmpeg (video filters, audio filters, global, special)
