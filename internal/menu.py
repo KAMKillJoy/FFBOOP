@@ -34,7 +34,7 @@ class Menu:
             options = list(self.codec.params.keys())
             for i, param in enumerate(options, 1):
                 val = self.settings.get(param, "not set")
-                print(f"{i}. {param} (Now: {val})")
+                print(f"{i}. {self.codec.params[param].get("label")} (Now: {val})")
 
             # Проверяем Fix resolution
             extra_idx = len(options) + 1
@@ -63,12 +63,6 @@ class Menu:
             param = options[choice_idx]
             if param == "scale":
                 self.__handle_scale()
-            elif param == "crf":
-                self.__handle_crf()
-            elif param == "audio bitrate":
-                self.__handle_audio_bitrate()
-            elif param == "fps":
-                self.__handle_fps()
             else:
                 self.__handle_param(param)
 
@@ -164,66 +158,8 @@ class Menu:
             else:
                 print("Invalid choice, try again.")
 
-    def __handle_crf(self):
-        min_crf, max_crf = self.codec.params["crf"]
-        Menu.clear_screen()
-        while True:
-            val = input(
-                f'Input CRF in range {min_crf} - {max_crf} (empty to go back):').strip()
-            if val == "":
-                break
-            try:
-                val_int = int(val)
-                if min_crf <= val_int <= max_crf:
-                    self.settings["crf"] = val_int
-                    Menu.clear_screen()
-                    break
-                else:
-                    Menu.clear_screen()
-                print(f"Invalid input, must be in range {min_crf}-{max_crf}")
-            except ValueError:
-                Menu.clear_screen()
-                print("Invalid input, must be a number")
 
-    def __handle_audio_bitrate(self):
-        min_ab, max_ab = self.codec.params["audio bitrate"]
-        Menu.clear_screen()
-        while True:
-            val = input(
-                f'Enter audio bitrate (kbps, numbers only, {min_ab}-{max_ab}) (empty to go back):').strip()
-            if val == "":
-                break
-            try:
-                val_int = int(val)
-                if min_ab <= val_int <= max_ab:
-                    self.settings["audio bitrate"] = val_int
-                    Menu.clear_screen()
-                    break
-                else:
-                    Menu.clear_screen()
-                    print(f"Invalid input, must be in range {min_ab}-{max_ab}")
 
-            except ValueError:
-                Menu.clear_screen()
-                print("Invalid input, must be a number")
-
-    def __handle_fps(self):
-        Menu.clear_screen()
-        while True:
-            val = input(
-                'Input FPS (empty to go back, "r" to reset):').strip()
-            if val == "":
-                break
-            elif val.lower() == "r":
-                self.settings["fps"] = helpers.DONT_CHANGE_STRING
-                break
-            try:
-                self.settings["fps"] = int(val)
-                Menu.clear_screen()
-                break
-            except ValueError:
-                Menu.clear_screen()
-                print("Invalid input, must be a number or 'r'")
 
     @staticmethod
     def clear_screen():
