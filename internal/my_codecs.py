@@ -55,7 +55,7 @@ vp9 = Codec(
         },
 
         "fps": {
-            "type": "choice",
+            "type": "direct",
             "label": "FPS",
             "help": "Enter desired FPS.",
             "flag": "-fps",
