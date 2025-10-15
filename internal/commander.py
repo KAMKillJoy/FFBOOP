@@ -51,8 +51,9 @@ class Commander:
         param_for_name = f'_q{self.settings.get("crf")}'  # магические литералы, может исправлю.
         passes = self.settings.get("passes")
         container = self.settings.get("container")
-
-        helpers.ResolutionFixer.replace_resolution_fixer(self.settings)
+        
+        if self.codec.even_res:
+            helpers.ResolutionFixer.replace_resolution_fixer(self.settings)
 
         video_filters = self.__build_options_string("video filters", "-vf", "=")
         audio_filters = self.__build_options_string("audio filters", "-af", "=")
