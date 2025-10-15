@@ -42,7 +42,7 @@ class Menu:
                 fix_val = self.settings.get("scale_fix")
                 print(f"{extra_idx}. Fix resolution (Now: {fix_val})")
 
-            print("Enter empty input to finish selection")
+            print("Enter empty input to start render")
             choice = input("> ").strip()
             if choice == "":
                 if self.codec.even_res:
