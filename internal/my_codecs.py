@@ -76,8 +76,8 @@ vp9 = Codec(
 
         "deadline": {
             "type": "choice",
-            "label": "Compression efficiency (Deadline)",
-            "help": "Compression efficiency (Deadline)",
+            "label": "Deadline (Compression efficiency)",
+            "help": "Deadline (Compression efficiency)",
             "choices": [
                 {"label": "good: the default and recommended for most applications", "command_value": "good"},
                 {"label": "best: recommended if you have lots of time and want the best compression efficiency",
@@ -198,7 +198,7 @@ svt_av1 = Codec(
 
         "preset": {
             "type": "direct",
-            "label": "Preset",
+            "label": "Preset (Compression efficiency)",
             "help": "Compression efficiency. 0-13. Lower is better."
                     "\nPreset 13 is only meant for debugging and running fast convex-hull encoding",
             "allowed": [str(i) for i in range(0, 14)],
@@ -306,7 +306,7 @@ hevc265 = Codec(
 
         "preset": {
             "type": "choice",
-            "label": "Preset",
+            "label": "Preset (Compression efficiency)",
             "help": "Compression efficiency",
             "choices": [
                 {"label": "ultrafast", "command_value": "ultrafast"},
