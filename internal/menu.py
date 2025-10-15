@@ -45,6 +45,8 @@ class Menu:
             print("Enter empty input to finish selection")
             choice = input("> ").strip()
             if choice == "":
+                if self.codec.even_res:
+                    helpers.ResolutionFixer.replace_resolution_fixer(self.settings)
                 break
 
             try:
