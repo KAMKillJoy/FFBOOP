@@ -13,6 +13,7 @@ DONT_CHANGE_STRING = "don't change"
 """
 
 RESETTABLE_HELP_STRING = ' (Input "r" or "reset" to keep original):'
+RESETTING_INPUT_VALUES = ("r", "reset")
 FIRST_PASS_SKIP_PARAMS = (
     "audio codec",
     "audio bitrate",
@@ -55,18 +56,19 @@ def create_options_json():
             "fps": DONT_CHANGE_STRING,
             "pixel_format": "yuv420p",
             "passes": "Two-Pass",
-            "container": "webm",
-            "audio bitrate": 128
+            "container": "mp4",
+            "audio codec": "libopus",
+            "audio bitrate": "128k"
         },
         "svt-av1": {
-            "crf": 28,
+            "crf": 35,
             "scale": DONT_CHANGE_STRING,
-            "preset": "8",
+            "preset": "6",
             "fps": DONT_CHANGE_STRING,
             "pixel_format": "yuv420p",
-            "passes": "Two-Pass",
-            "container": "mkv",
-            "audio bitrate": 128
+            "container": "mp4",
+            "audio codec": "libopus",
+            "audio bitrate": "128k"
         },
         "hevc": {
             "crf": 23,
@@ -76,7 +78,8 @@ def create_options_json():
             "pixel_format": "yuv420p",
             "passes": "Two-Pass",
             "container": "mp4",
-            "audio bitrate": 128
+            "audio codec": "libopus",
+            "audio bitrate": "128k"
         }
     }
 
@@ -144,5 +147,5 @@ else:
 
 def check_ffmpeg_installed():
     if shutil.which("ffmpeg") is None:
-        print("FFmpeg не найден. Установите ffmpeg и убедитесь, что он доступен в PATH.")
+        print("FFmpeg not found. Please install ffmpeg and make sure it is available in PATH.")
         sys.exit(1)
