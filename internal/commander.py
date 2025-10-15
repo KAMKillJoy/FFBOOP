@@ -1,7 +1,6 @@
 import os
 
 from internal import helpers
-from internal.helpers import os_adapter
 from internal.my_codecs import Codec
 
 
@@ -14,35 +13,33 @@ class Commander:
         self.codec = codec
         self.settings = settings
 
-    def __build_vf_list(self) -> str:
-        vf_list = []
-        fps = self.settings.get("fps")
-        pixel_format = self.settings.get("pixel_format")
-        scale = self.settings.get("scale")
-        scale_fix = self.settings.get("scale_fix")
+    def __parse_params(self, context) -> dict:
+        params = self.codec.params
+        return {key: value
+                for key, value in params.items() if isinstance(value, dict) and value.get("context") == context}
 
-        # обработка scale
-        if scale and scale != helpers.DONT_CHANGE_STRING:
-            vf_list.append(f"scale={scale}")
+    def __build_options_string(self,
+                               context: str,
+                               option_flag: str,
+                               separator: str,
+                               exclude: tuple[str, ...] = ()
+                               ) -> str:
 
-        # обработка scale_fix
-        if scale_fix == "pad":
-            vf_list.append(helpers.ResolutionFixer.PAD)
+        o_params = self.__parse_params(context)
+        params_list = []
+        for key, value in o_params.items():
+            val = self.settings.get(key)
+            if key in exclude:
+                continue
+            if not val or val == helpers.DONT_CHANGE_STRING:
+                continue
+            flag = value.get("flag")
+            if not flag:
+                continue
+            params_list.append(f"{flag}{separator}{val}")
 
-        elif scale_fix == "crop":
-            vf_list.append(helpers.ResolutionFixer.CROP)
-
-        # обработка  fps
-        if fps and fps != helpers.DONT_CHANGE_STRING:
-            vf_list.append(f"fps={fps}")
-
-        # обработка pixel_format
-        if pixel_format and pixel_format != helpers.DONT_CHANGE_STRING:
-            vf_list.append(f"format={pixel_format}")
-
-        vf = f'-vf "{",".join(vf_list)}"' if vf_list else ""
-
-        return vf
+        o_string = f'{option_flag} "{",".join(params_list)}"' if params_list else ""
+        return o_string
 
     def build_ffmpeg_command(self, file: str, output_dir) -> str:
         """
@@ -51,33 +48,40 @@ class Commander:
         """
 
         filename, ext = os.path.splitext(os.path.basename(file))
-        crf = self.settings.get("crf")
-        preset = self.settings.get("preset")
-        container = self.settings.get("container")
+        param_for_name = f'_q{self.settings.get("crf")}'  # магические литералы, может исправлю.
         passes = self.settings.get("passes")
-        audio_bitrate = int(self.settings.get("audio bitrate"))
+        container = self.settings.get("container")
 
-        vf = self.__build_vf_list()
+        video_filters = self.__build_options_string("video filters", "-vf", "=")
+        audio_filters = self.__build_options_string("audio filters", "-af", "=")
+        global_options = self.__build_options_string("global", "", " ")
 
-        output_file = os.path.join(output_dir, f"{filename}_{self.codec.name}_q{crf}")
+        output_file = os.path.join(output_dir, f'{filename}_{self.codec.name}{param_for_name}')
 
-        vcodec = self.codec.vcodec
-        acodec = self.codec.acodec
-
-        if passes == "One-Pass":
-            cmd = (
-                f'ffmpeg -y -i "{file}" {vf} -c:v {vcodec} '
-                f'-preset {str(preset)} -crf {str(crf)} '
-                f'-c:a {acodec} -b:a {audio_bitrate}k "{output_file}_1pass.{container}"'
-            )
-        elif passes == "Two-Pass":
-            cmd = (
-                f'ffmpeg -y -i "{file}" {vf} -c:v {vcodec} '
-                f'-preset {str(preset)} -crf {str(crf)} -pass 1 -an -f null {os_adapter.NULL_DEVICE} && '
-                f'ffmpeg -y -i "{file}" {vf} -c:v {vcodec} '
-                f'-preset {str(preset)} -crf {str(crf)} -pass 2 '
-                f'-c:a {acodec} -b:a {audio_bitrate}k "{output_file}_2pass.{container}"'
-            )
-        else:
+        if passes != "One-Pass" and passes != "Two-Pass":
             raise ValueError(f"Passes should be one of 'One-Pass', 'Two-Pass'")
+
+        elif passes == "One-Pass":
+            cmd = (
+                f'ffmpeg -y '
+                f'-i "{file}" '
+                f'{video_filters} {audio_filters} {global_options} '
+                f'"{output_file}_1pass.{container}"'
+            )
+        else:  # passes == "Two-Pass"
+            global_options_wo_audio = self.__build_options_string("global", "", " ",
+                                                                  helpers.FIRST_PASS_SKIP_PARAMS)
+            cmd1 = (f'ffmpeg -y '
+                    f'-i "{file}" '
+                    f'{video_filters} {global_options_wo_audio} '
+                    f'-pass 1 -an -f null {helpers.os_adapter.NULL_DEVICE} '
+                    )
+
+            cmd2 = (f'ffmpeg -y '
+                    f'-i "{file}" '
+                    f'{video_filters} {audio_filters} {global_options} '
+                    f'"{output_file}_2pass.{container}"'
+                    )
+
+            cmd = f'{cmd1} && {cmd2}'
         return cmd
