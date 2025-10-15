@@ -1,9 +1,9 @@
 from internal import helpers
-from internal.helpers import os_adapter
+from internal.my_codecs import Codec
 
 
 class Menu:
-    def __init__(self, codec, settings):
+    def __init__(self, codec: Codec, settings: dict):
         """
         codec    - объект Codec
         settings - словарь для хранения выбранных значений параметров
@@ -84,7 +84,7 @@ class Menu:
 
                 if val == "":
                     return
-                if param_dict["resettable"] and (val == "r" or val == "reset"):
+                if param_dict["resettable"] and (val in helpers.RESETTING_INPUT_VALUES):
                     self.settings[param] = helpers.DONT_CHANGE_STRING
                     return
                 if allowed and val in allowed:
@@ -180,4 +180,4 @@ class Menu:
 
     @staticmethod
     def clear_screen():
-        os_adapter.clear_screen()
+        helpers.os_adapter.clear_screen()
