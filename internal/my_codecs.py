@@ -132,7 +132,8 @@ vp9 = Codec(
         "audio bitrate": {
             "type": "direct",
             "label": "Audio Bitrate",
-            "help": "Enter audio bitrate",
+            "help": "Enter audio bitrate."
+                    "\nUse k for kbps, M for Mbps",
             "flag": "-b:a",
             "context": "global",
             "resettable": False,
@@ -223,7 +224,9 @@ svt_av1 = Codec(
         "audio codec": {
             "type": "choice",
             "label": "Audio Codec",
-            "help": "Select audio codec",
+            "help": "Enter audio bitrate."
+                    "\nUse k for kbps, M for Mbps",
+
             "choices": [
                 {"label": "libopus", "command_value": "libopus"},
                 {"label": "libvorbis", "command_value": "libvorbis"},
@@ -365,7 +368,8 @@ hevc265 = Codec(
         "audio bitrate": {
             "type": "direct",
             "label": "Audio Bitrate",
-            "help": "Enter audio bitrate",
+            "help": "Enter audio bitrate."
+                    "\nUse k for kbps, M for Mbps",
             "flag": "-b:a",
             "context": "global",
             "resettable": False,

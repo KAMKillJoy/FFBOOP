@@ -8,7 +8,7 @@
     "passes": "Two-Pass",
     "container": "mp4",
     "audio codec": "libopus",
-    "audio bitrate": 128
+    "audio bitrate": "128k"
   },
   "svt-av1": {
     "crf": 35,
@@ -18,7 +18,7 @@
     "pixel_format": "yuv420p",
     "container": "mp4",
     "audio codec": "libopus",
-    "audio bitrate": 128
+    "audio bitrate": "128k"
   },
   "hevc": {
     "crf": 23,
@@ -29,6 +29,6 @@
     "passes": "Two-Pass",
     "container": "mp4",
     "audio codec": "libopus",
-    "audio bitrate": 128
+    "audio bitrate": "128k"
   }
 }
