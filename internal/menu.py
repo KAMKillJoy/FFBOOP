@@ -73,7 +73,6 @@ class Menu:
         if param_type == "direct":
             # свободный ввод
             allowed = param_dict.get("allowed")
-            print(allowed)
 
             if param_dict.get("resettable"):
                 help_string = param_dict["help"] + helpers.RESETTABLE_HELP_STRING
