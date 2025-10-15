@@ -23,6 +23,13 @@ class ResolutionFixer:
     PAD = "pad=width=ceil(iw/2)*2:height=ceil(ih/2)*2"
     CROP = "crop=trunc(iw/2)*2:trunc(ih/2)*2"
 
+    @staticmethod
+    def replace_resolution_fixer(settings: dict):
+        if settings.get("scale_fix") == "pad":
+            settings["scale_fix"] = ResolutionFixer.PAD
+        elif settings.get("scale_fix") == "crop":
+            settings["scale_fix"] = ResolutionFixer.CROP
+
 
 script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
 options_path = os.path.join(script_dir, "options.json")

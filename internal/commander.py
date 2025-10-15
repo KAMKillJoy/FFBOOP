@@ -52,6 +52,8 @@ class Commander:
         passes = self.settings.get("passes")
         container = self.settings.get("container")
 
+        helpers.ResolutionFixer.replace_resolution_fixer(self.settings)
+
         video_filters = self.__build_options_string("video filters", "-vf", "=")
         audio_filters = self.__build_options_string("audio filters", "-af", "=")
         global_options = self.__build_options_string("global", "", " ")
