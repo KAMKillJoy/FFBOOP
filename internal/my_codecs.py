@@ -1,15 +1,23 @@
 class Codec:
+    """
+    Класс для представления видеокодека с его параметрами.
+
+    Attributes:
+        name (str): Имя кодека в меню.
+        params (dict): Параметры рендера.
+        even_res (bool): Флаг, указывающий, должны ли значения высоты и ширины быть чётными. Уточни в документации кодека
+        vcodec (str): Имя кодека в ffmpeg.
+    """
+
     def __init__(
             self,
             name: str = None,
             params: dict = None,
-            container_defaults: list[str] = None,
-            even_res: bool = True,
+            even_res: bool = False,
             vcodec: str = None,
     ):
         self.name = name
         self.params = params
-        self.container_defaults = container_defaults or []
         self.even_res = even_res
         self.vcodec = vcodec
 
@@ -30,6 +38,7 @@ class Codec:
 vp9 = Codec(
     name="vp9",
     vcodec="libvpx-vp9",
+    even_res=True,
     params={
         "crf": {
             "type": "direct",  # тип параметра.
@@ -60,7 +69,7 @@ vp9 = Codec(
             "type": "direct",
             "label": "FPS",
             "help": "Enter desired FPS.",
-            "flag": "-fps",
+            "flag": "fps",
             "context": "video filters",
             "resettable": True,
         },
@@ -85,12 +94,12 @@ vp9 = Codec(
             "label": "Pixel Format",
             "help": "Pixel Format. Specifies the color sampling and bit depth of the video (e.g. yuv420p for compatibility).",
             "choices": [
-                {"label": "yuv420", "command_value": "yuv420"},
-                {"label": "yuv422p", "command_value": "yuv422p"},
-                {"label": "yuv444p", "command_value": "yuv444p"}
+                {"label": "yuv420p (8 bit. Most compatible)", "command_value": "yuv420p"},
+                {"label": "yuv422p (10 bit)", "command_value": "yuv422p"},
+                {"label": "yuv444p (12 bit)", "command_value": "yuv444p"}
             ],
-            "flag": "format",
-            "context": "video filters",
+            "flag": "-pix_fmt",
+            "context": "global",
             "resettable": True
         },
 
@@ -116,16 +125,16 @@ vp9 = Codec(
                 {"label": "aac", "command_value": "aac"}
             ],
             "flag": "-c:a",
-            "context": "audio filters",
+            "context": "global",
             "resettable": False
         },
 
         "audio bitrate": {
             "type": "direct",
             "label": "Audio Bitrate",
-            "help": "Enter audio bitrate:",
+            "help": "Enter audio bitrate",
             "flag": "-b:a",
-            "context": "audio filters",
+            "context": "global",
             "resettable": False,
         },
         "container": {
@@ -141,8 +150,7 @@ vp9 = Codec(
             "resettable": False
         },
 
-    },
-    even_res=True
+    }
 )
 
 # -------------------
@@ -150,18 +158,117 @@ vp9 = Codec(
 # -------------------
 svt_av1 = Codec(
     name="svt-av1",
-    params={
-        "crf": [0, 63],  # обрабатывается уникальным методом. Список содержит max и min значение.
-        "scale": "__handled__",  # обрабатывается уникальным методом. Значение параметра неважно.
-        "fps": "__handled__",  # обрабатывается уникальным методом. Значение параметра неважно.
-        "preset": list(range(0, 10)),  # 0–9
-        "pixel_format": ["yuv420p", "yuv422p", "yuv444p", "don't change"],
-        "passes": ["One-Pass", "Two-Pass"],
-        "container": ["mkv", "mp4", "webm"],
-        "audio bitrate": [6, 510]  # обрабатывается уникальным методом. Список содержит max и min значение.
-    },
+    vcodec="libsvtav1",
     even_res=False,
-    vcodec="libsvtav1"
+    params={
+        "crf": {
+            "type": "direct",  # тип параметра.
+            # direct - ввод с клавиатуры,
+            # choice - выбор вариантов,
+            # handled - обрабатывается собственным методом
+            "label": "CRF",  # имя пункта в меню
+            "help": "Quality control value (lower = better)",  # подсказка при выборе пункта меню (при вводе значения)
+            "allowed": [str(i) for i in range(0, 64)],  # допустимые значения.
+            # !Участвует в проверке input in allowed, а input всегда строка!
+
+            "flag": "-crf",  # флаг этого параметра в строке ffmpeg
+            "context": "global",
+            # место этого параметра в строке ffmpeg (video filters, audio filters, global, special)
+            "resettable": False,
+            # сбрасываемое ли? Если да, то принимается "r" или "reset" чтобы не менять этот параметр при рендере
+        },
+
+        "scale": {
+            "type": "handled",
+            "label": "Scale",
+            "help": "Resize video.",
+            "context": "video filters",
+            "resettable": True,
+        },
+
+        "fps": {
+            "type": "direct",
+            "label": "FPS",
+            "help": "Enter desired FPS.",
+            "flag": "fps",
+            "context": "video filters",
+            "resettable": True,
+        },
+
+        "preset": {
+            "type": "direct",
+            "label": "Preset",
+            "help": "Compression efficiency. 0-13. Lower is better."
+                    "\nPreset 13 is only meant for debugging and running fast convex-hull encoding",
+            "allowed": [str(i) for i in range(0, 14)],
+            "flag": "-preset",
+            "context": "global",
+            "resettable": False
+        },
+
+        "pixel_format": {
+            "type": "choice",
+            "label": "Pixel Format",
+            "help": "Pixel Format. Specifies the color sampling and bit depth of the video (e.g. yuv420p for compatibility).",
+            "choices": [
+                {"label": "yuv420p (8 bit. Most compatible)", "command_value": "yuv420p"},
+                {"label": "yuv422p (10 bit)", "command_value": "yuv422p"},
+                {"label": "yuv444p (12 bit)", "command_value": "yuv444p"}
+            ],
+            "flag": "-pix_fmt",
+            "context": "global",
+            "resettable": True
+        },
+
+        "passes": {
+            "type": "choice",
+            "label": "Passes",
+            "help": "Select encoding mode: single-pass (faster) or two-pass (better quality/size).",
+            "choices": [
+                {"label": "One-Pass", "command_value": "One-Pass"},
+                {"label": "Two-Pass", "command_value": "Two-Pass"}
+            ],
+            "context": "special",
+            "resettable": False
+        },
+
+        "audio codec": {
+            "type": "choice",
+            "label": "Audio Codec",
+            "help": "Select audio codec",
+            "choices": [
+                {"label": "libopus", "command_value": "libopus"},
+                {"label": "libvorbis", "command_value": "libvorbis"},
+                {"label": "aac", "command_value": "aac"}
+            ],
+            "flag": "-c:a",
+            "context": "global",
+            "resettable": False
+        },
+
+        "audio bitrate": {
+            "type": "direct",
+            "label": "Audio Bitrate",
+            "help": "Enter audio bitrate",
+            "flag": "-b:a",
+            "context": "global",
+            "resettable": False,
+        },
+        "container": {
+            "type": "choice",
+            "label": "Container",
+            "help": "Select container:",
+            "choices": [
+                {"label": "webm", "command_value": "webm"},
+                {"label": "mkv", "command_value": "mkv"},
+                {"label": "mp4", "command_value": "mp4"}
+            ],
+            "context": "special",
+            "resettable": False
+        },
+
+    }
+
 )
 
 # -------------------
@@ -169,17 +276,125 @@ svt_av1 = Codec(
 # -------------------
 hevc265 = Codec(
     name="hevc",
-    params={
-        "crf": [0, 51],  # обрабатывается уникальным методом. Список содержит max и min значение.
-        "scale": "__handled__",  # обрабатывается уникальным методом. Значение параметра неважно.
-        "fps": "__handled__",  # обрабатывается уникальным методом. Значение параметра неважно.
-        "preset": ["ultrafast", "superfast", "veryfast", "faster", "fast",
-                   "medium", "slow", "slower", "veryslow", "placebo"],
-        "pixel_format": ["yuv420p", "yuv422p", "yuv444p", "don't change"],
-        "passes": ["One-Pass", "Two-Pass"],
-        "container": ["mp4", "mkv", "mov", "ts"],
-        "audio bitrate": [6, 510]  # обрабатывается уникальным методом. Список содержит max и min значение.
-    },
+    vcodec="libx265",
     even_res=True,
-    vcodec="libx265"
+    params={
+        "crf": {
+            "type": "direct",  # тип параметра.
+            # direct - ввод с клавиатуры,
+            # choice - выбор вариантов,
+            # handled - обрабатывается собственным методом
+            "label": "CRF",  # имя пункта в меню
+            "help": "Quality control value (lower = better)",  # подсказка при выборе пункта меню (при вводе значения)
+            "allowed": [str(i) for i in range(0, 64)],  # допустимые значения.
+            # !Участвует в проверке input in allowed, а input всегда строка!
+
+            "flag": "-crf",  # флаг этого параметра в строке ffmpeg
+            "context": "global",
+            # место этого параметра в строке ffmpeg (video filters, audio filters, global, special)
+            "resettable": False,
+            # сбрасываемое ли? Если да, то принимается "r" или "reset" чтобы не менять этот параметр при рендере
+        },
+
+        "scale": {
+            "type": "handled",
+            "label": "Scale",
+            "help": "Resize video.",
+            "context": "video filters",
+            "resettable": True,
+        },
+
+        "fps": {
+            "type": "direct",
+            "label": "FPS",
+            "help": "Enter desired FPS.",
+            "flag": "fps",
+            "context": "video filters",
+            "resettable": True,
+        },
+
+        "preset": {
+            "type": "choice",
+            "label": "Preset",
+            "help": "Compression efficiency",
+            "choices": [
+                {"label": "ultrafast", "command_value": "ultrafast"},
+                {"label": "superfast", "command_value": "superfast"},
+                {"label": "veryfast", "command_value": "veryfast"},
+                {"label": "faster", "command_value": "faster"},
+                {"label": "fast", "command_value": "fast"},
+                {"label": "medium", "command_value": "medium"},
+                {"label": "slow", "command_value": "slow"},
+                {"label": "slower", "command_value": "slower"},
+                {"label": "veryslow", "command_value": "veryslow"},
+                {"label": "placebo", "command_value": "placebo"}
+            ],
+            "flag": "-preset",
+            "context": "global",
+            "resettable": False
+        },
+
+        "pixel_format": {
+            "type": "choice",
+            "label": "Pixel Format",
+            "help": "Pixel Format. Specifies the color sampling and bit depth of the video (e.g. yuv420p for compatibility).",
+            "choices": [
+                {"label": "yuv420p (8 bit. Most compatible)", "command_value": "yuv420p"},
+                {"label": "yuv422p (10 bit)", "command_value": "yuv422p"},
+                {"label": "yuv444p (12 bit)", "command_value": "yuv444p"}
+            ],
+            "flag": "-pix_fmt",
+            "context": "global",
+            "resettable": True
+        },
+
+        "passes": {
+            "type": "choice",
+            "label": "Passes",
+            "help": "Select encoding mode: single-pass (faster) or two-pass (better quality/size).",
+            "choices": [
+                {"label": "One-Pass", "command_value": "One-Pass"},
+                {"label": "Two-Pass", "command_value": "Two-Pass"}
+            ],
+            "context": "special",
+            "resettable": False
+        },
+
+        "audio codec": {
+            "type": "choice",
+            "label": "Audio Codec",
+            "help": "Select audio codec",
+            "choices": [
+                {"label": "libopus", "command_value": "libopus"},
+                {"label": "libvorbis", "command_value": "libvorbis"},
+                {"label": "aac", "command_value": "aac"}
+            ],
+            "flag": "-c:a",
+            "context": "global",
+            "resettable": False
+        },
+
+        "audio bitrate": {
+            "type": "direct",
+            "label": "Audio Bitrate",
+            "help": "Enter audio bitrate",
+            "flag": "-b:a",
+            "context": "global",
+            "resettable": False,
+        },
+        "container": {
+            "type": "choice",
+            "label": "Container",
+            "help": "Select container:",
+            "choices": [
+                {"label": "webm", "command_value": "webm"},
+                {"label": "mkv", "command_value": "mkv"},
+                {"label": "mp4", "command_value": "mp4"}
+            ],
+            "context": "special",
+            "resettable": False
+        },
+
+    }
+
 )
