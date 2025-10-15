@@ -220,18 +220,6 @@ svt_av1 = Codec(
             "resettable": True
         },
 
-        "passes": {
-            "type": "choice",
-            "label": "Passes",
-            "help": "Select encoding mode: single-pass (faster) or two-pass (better quality/size).",
-            "choices": [
-                {"label": "One-Pass", "command_value": "One-Pass"},
-                {"label": "Two-Pass", "command_value": "Two-Pass"}
-            ],
-            "context": "special",
-            "resettable": False
-        },
-
         "audio codec": {
             "type": "choice",
             "label": "Audio Codec",

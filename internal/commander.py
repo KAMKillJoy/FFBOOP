@@ -58,10 +58,10 @@ class Commander:
 
         output_file = os.path.join(output_dir, f'{filename}_{self.codec.name}{param_for_name}')
 
-        if passes != "One-Pass" and passes != "Two-Pass":
+        if passes not in ("One-Pass", "Two-Pass", None):
             raise ValueError(f"Passes should be one of 'One-Pass', 'Two-Pass'")
 
-        elif passes == "One-Pass":
+        elif passes in ("One-Pass", None):
             cmd = (
                 f'ffmpeg -y '
                 f'-i "{file}" '
