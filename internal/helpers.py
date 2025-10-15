@@ -7,11 +7,16 @@ import sys
 from internal import my_codecs
 
 DONT_CHANGE_STRING = "don't change"
-RESETTABLE_HELP_STRING = ' (Input "r" or "reset" to keep original):'
 """
 Это значение параметра, которое присваивается параметру кодека, если его не надо менять. 
 Оно же отображается в консольном меню
 """
+
+RESETTABLE_HELP_STRING = ' (Input "r" or "reset" to keep original):'
+FIRST_PASS_SKIP_PARAMS = (
+    "audio codec",
+    "audio bitrate",
+)
 
 
 class ResolutionFixer:
