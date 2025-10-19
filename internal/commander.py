@@ -38,7 +38,7 @@ class Commander:
                 continue
             params_list.append(f"{flag}{separator}{val}")
 
-        o_string = f'{option_flag} "{" ".join(params_list)}"' if params_list else ""
+        o_string = f'{option_flag} {" ".join(params_list)}' if params_list else ""
         return o_string
 
     def build_ffmpeg_command(self, file: str, output_dir) -> str:
