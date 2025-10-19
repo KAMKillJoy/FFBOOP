@@ -61,7 +61,7 @@ def create_options_json():
             "audio bitrate": "128k"
         },
         "svt-av1": {
-            "crf": 35,
+            "crf": 22,
             "scale": DONT_CHANGE_STRING,
             "preset": "6",
             "fps": DONT_CHANGE_STRING,
