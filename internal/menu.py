@@ -82,7 +82,8 @@ class Menu:
                 help_string = param_dict["help"]
 
             while True:
-                val = input(help_string.strip())
+                print(help_string.strip())
+                val = input("> ".strip())
 
                 if val == "":
                     return
