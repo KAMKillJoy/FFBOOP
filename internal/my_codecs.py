@@ -162,7 +162,7 @@ vp9 = Codec(
 svt_av1 = Codec(
     name="svt-av1",
     vcodec="libsvtav1",
-    even_res=False,
+    even_res=True,
     params={
         "crf": {
             "type": "direct",  # тип параметра.
