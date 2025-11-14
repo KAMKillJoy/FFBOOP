@@ -71,8 +71,8 @@ class Commander:
         passes = self.settings.get("passes")
         container = self.settings.get("container")
 
-        video_filters = self.__build_options_string("video filters", "-vf", "=", ", ")
-        audio_filters = self.__build_options_string("audio filters", "-af", "=", ", ")
+        video_filters = self.__build_options_string("video filters", "-vf", "=", ",")
+        audio_filters = self.__build_options_string("audio filters", "-af", "=", ",")
         global_options = self.__build_options_string("global", "", " ", " ")
 
         output_file = os.path.join(output_dir, f'{filename}_{self.codec.name}{param_for_name}')
