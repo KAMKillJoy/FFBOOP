@@ -60,6 +60,23 @@ class Commander:
         o_string = f'{option_flag} {f"{join_sep}".join(params_list)}' if params_list else ""
         return o_string
 
+    def __build_video_filters_substr(self):
+        video_filters = self.__build_options_string("video filters", "-vf", "=", ",")
+        scale_fix = self.settings.get("scale_fix")
+        if scale_fix == "pad":
+            video_filters += f",{helpers.ResolutionFixer.PAD}"
+        elif scale_fix == "crop":
+            video_filters += f",{helpers.ResolutionFixer.CROP}"
+        return video_filters
+
+    def __build_audio_filters_substr(self):
+        audio_filters = self.__build_options_string("audio filters", "-af", "=", ",")
+        return audio_filters
+
+    def __build_global_filters_substr(self):
+        global_options = self.__build_options_string("global", "", " ", " ")
+        return global_options
+
     def build_ffmpeg_command(self, file: str, output_dir) -> str:
         """
         Генерация ffmpeg команды для одного файла с учётом настроек.
@@ -71,9 +88,9 @@ class Commander:
         passes = self.settings.get("passes")
         container = self.settings.get("container")
 
-        video_filters = self.__build_options_string("video filters", "-vf", "=", ",")
-        audio_filters = self.__build_options_string("audio filters", "-af", "=", ",")
-        global_options = self.__build_options_string("global", "", " ", " ")
+        video_filters = self.__build_video_filters_substr()
+        audio_filters = self.__build_audio_filters_substr()
+        global_options = self.__build_global_filters_substr()
 
         output_file = os.path.join(output_dir, f'{filename}_{self.codec.name}{param_for_name}')
 

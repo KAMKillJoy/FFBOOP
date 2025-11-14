@@ -45,8 +45,6 @@ class Menu:
             print("Enter empty input to start render")
             choice = input("> ").strip()
             if choice == "":
-                if self.codec.even_res:
-                    helpers.ResolutionFixer.replace_resolution_fixer(self.settings)
                 break
 
             try:
