@@ -3,8 +3,7 @@ import os
 import shutil
 import subprocess
 import sys
-
-from internal import my_codecs
+from abc import ABC, abstractmethod
 
 DONT_CHANGE_STRING = "don't change"
 """
@@ -88,23 +87,29 @@ def create_options_json():
     print(f"Created options.json at {options_path}")
 
 
+class PlatformAdapter(ABC):
+    @property
+    @abstractmethod
+    def NULL_DEVICE(self) -> str:
+        pass
 
-
-class PlatformAdapter:
-    NULL_DEVICE: str
-
+    @abstractmethod
     def set_terminal_title(self, title: str):
-        raise NotImplemented
+        pass
 
+    @abstractmethod
     def open_directory(self, dest: str):
-        raise NotImplemented
+        pass
 
+    @abstractmethod
     def clear_screen(self):
-        raise NotImplemented
+        pass
 
 
 class WindowsAdapter(PlatformAdapter):
-    NULL_DEVICE = "NUL"
+    @property
+    def NULL_DEVICE(self) -> str:
+        return "NUL"
 
     def set_terminal_title(self, title: str):
         os.system(f"title {title}")
@@ -117,7 +122,9 @@ class WindowsAdapter(PlatformAdapter):
 
 
 class PosixAdapter(PlatformAdapter):
-    NULL_DEVICE = "/dev/null"
+    @property
+    def NULL_DEVICE(self) -> str:
+        return "/dev/null"
 
     def set_terminal_title(self, title: str):
         sys.stdout.write(f"\033]0;{title}\007")
