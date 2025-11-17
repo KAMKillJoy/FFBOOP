@@ -6,7 +6,7 @@ import subprocess
 import sys
 from datetime import datetime
 
-from internal import commander, helpers
+from internal import commander, helpers, my_codecs
 from internal.menu import Menu
 
 helpers.check_ffmpeg_installed()
@@ -22,7 +22,7 @@ def parse_args():
 
 
 args = parse_args()
-codecs = helpers.supported_codecs()
+codecs = my_codecs.Codec.codecs
 
 
 def resolve_codec(preselected_codec=None, skip_menu: bool = False):

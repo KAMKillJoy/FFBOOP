@@ -8,6 +8,7 @@ class Codec:
         even_res (bool): Флаг, указывающий, должны ли значения высоты и ширины быть чётными. Уточни в документации кодека
         vcodec (str): Имя кодека в ffmpeg.
     """
+    codecs = list()
 
     def __init__(
             self,
@@ -20,6 +21,8 @@ class Codec:
         self.params = params
         self.even_res = even_res
         self.vcodec = vcodec
+
+        Codec.codecs.append(self)  # составление списка поддерживаемых кодеков. Хранит сами экземляры.
 
     def get_param_values(self, param: str):
         return self.params.get(param)

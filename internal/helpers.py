@@ -88,14 +88,6 @@ def create_options_json():
     print(f"Created options.json at {options_path}")
 
 
-def supported_codecs() -> list:
-    """
-    Возвращает список объектов Codec, доступных в my_codecs.
-    """
-    return [
-        obj for name, obj in vars(my_codecs).items()
-        if isinstance(obj, my_codecs.Codec)
-    ]
 
 
 class PlatformAdapter:
