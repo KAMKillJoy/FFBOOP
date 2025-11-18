@@ -62,11 +62,6 @@ class Commander:
 
     def __build_video_filters_substr(self):
         video_filters = self.__build_options_string("video filters", "-vf", "=", ",")
-        scale_fix = self.settings.get("scale_fix")
-        if scale_fix == "pad":
-            video_filters += f",{helpers.ResolutionFixer.PAD}"
-        elif scale_fix == "crop":
-            video_filters += f",{helpers.ResolutionFixer.CROP}"
         return video_filters
 
     def __build_audio_filters_substr(self):

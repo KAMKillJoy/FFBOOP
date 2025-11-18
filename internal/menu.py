@@ -36,12 +36,6 @@ class Menu:
                 val = self.settings.get(param, "not set")
                 print(f"{i}. {self.codec.params[param].get('label')} (Now: {val})")
 
-            # Проверяем Fix resolution
-            extra_idx = len(options) + 1
-            if self.codec.even_res:
-                fix_val = self.settings.get("scale_fix")
-                print(f"{extra_idx}. Fix resolution (Now: {fix_val})")
-
             print("Enter empty input to start render")
             choice = input("> ").strip()
             if choice == "":
@@ -50,11 +44,6 @@ class Menu:
             try:
                 choice_idx = int(choice) - 1
             except ValueError:
-                continue
-
-            # Подменю Fix resolution
-            if self.codec.even_res and choice_idx == len(options):
-                self.__handle_fix_resolution()
                 continue
 
             if choice_idx < 0 or choice_idx >= len(options):
@@ -155,28 +144,6 @@ class Menu:
                 break
             else:
                 Menu.clear_screen()
-                print("Invalid choice, try again.")
-
-    def __handle_fix_resolution(self):
-        while True:
-            Menu.clear_screen()
-            print("Fix resolution options:")
-            print("1. Add 1px padding (pad)")
-            print("2. Crop 1px (crop)")
-            print("3. Cancel")
-            choice = input("> ").strip()
-            if choice == "1":
-                self.settings["scale_fix"] = "pad"
-                break
-            elif choice == "2":
-                self.settings["scale_fix"] = "crop"
-                break
-            elif choice == "3":
-                self.settings.pop("scale_fix", None)
-                break
-            elif choice == "":
-                break
-            else:
                 print("Invalid choice, try again.")
 
     @staticmethod

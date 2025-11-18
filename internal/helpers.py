@@ -23,13 +23,6 @@ class ResolutionFixer:
     PAD = "pad=width=ceil(iw/2)*2:height=ceil(ih/2)*2"
     CROP = "crop=trunc(iw/2)*2:trunc(ih/2)*2"
 
-    @staticmethod
-    def replace_resolution_fixer(settings: dict):
-        if settings.get("scale_fix") == "pad":
-            settings["scale_fix"] = ResolutionFixer.PAD
-        elif settings.get("scale_fix") == "crop":
-            settings["scale_fix"] = ResolutionFixer.CROP
-
 
 script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
 options_path = os.path.join(script_dir, "options.json")
@@ -67,7 +60,8 @@ def create_options_json():
             "pixel_format": "yuv420p",
             "container": "mp4",
             "audio codec": "libopus",
-            "audio bitrate": "128k"
+            "audio bitrate": "128k",
+            "uneven scale fix": ResolutionFixer.PAD
         },
         "hevc": {
             "crf": 23,
@@ -78,7 +72,8 @@ def create_options_json():
             "passes": "Two-Pass",
             "container": "mp4",
             "audio codec": "libopus",
-            "audio bitrate": "128k"
+            "audio bitrate": "128k",
+            "uneven scale fix": ResolutionFixer.PAD
         }
     }
 

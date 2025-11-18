@@ -1,3 +1,6 @@
+from internal import helpers
+
+
 class Codec:
     """
     Класс для представления видеокодека с его параметрами.
@@ -5,7 +8,6 @@ class Codec:
     Attributes:
         name (str): Имя кодека в меню.
         params (dict): Параметры рендера.
-        even_res (bool): Флаг, указывающий, должны ли значения высоты и ширины быть чётными. Уточни в документации кодека
         vcodec (str): Имя кодека в ffmpeg.
     """
     codecs = list()
@@ -14,12 +16,10 @@ class Codec:
             self,
             name: str = None,
             params: dict = None,
-            even_res: bool = False,
             vcodec: str = None,
     ):
         self.name = name
         self.params = params
-        self.even_res = even_res
         self.vcodec = vcodec
 
         Codec.codecs.append(self)  # составление списка поддерживаемых кодеков. Хранит сами экземляры.
@@ -41,7 +41,6 @@ class Codec:
 vp9 = Codec(
     name="vp9",
     vcodec="libvpx-vp9",
-    even_res=True,
     params={
         "crf": {
             "type": "direct",  # тип параметра.
@@ -143,6 +142,7 @@ vp9 = Codec(
             "context": "global",
             "resettable": False,
         },
+
         "container": {
             "type": "choice",
             "label": "Container",
@@ -154,8 +154,7 @@ vp9 = Codec(
             ],
             "context": "special",
             "resettable": False
-        },
-
+        }
     }
 )
 
@@ -165,7 +164,6 @@ vp9 = Codec(
 svt_av1 = Codec(
     name="svt-av1",
     vcodec="libsvtav1",
-    even_res=True,
     params={
         "crf": {
             "type": "direct",  # тип параметра.
@@ -252,6 +250,7 @@ svt_av1 = Codec(
             "context": "global",
             "resettable": False,
         },
+
         "container": {
             "type": "choice",
             "label": "Container",
@@ -265,8 +264,19 @@ svt_av1 = Codec(
             "resettable": False
         },
 
+        "uneven scale fix": {
+            "type": "choice",
+            "label": "Uneven Scale Fix",
+            "help": "This codec needs height and width to be even numbers",
+            "choices": [
+                {"label": "Add 1px padding (preferable)", "command_value": helpers.ResolutionFixer.PAD},
+                {"label": "Crop 1px", "command_value": helpers.ResolutionFixer.CROP},
+                {"label": "Do not change", "command_value": helpers.DONT_CHANGE_STRING}
+            ],
+            "context": "video filters",
+            "resettable": False
+        }
     }
-
 )
 
 # -------------------
@@ -275,7 +285,6 @@ svt_av1 = Codec(
 hevc265 = Codec(
     name="hevc",
     vcodec="libx265",
-    even_res=True,
     params={
         "crf": {
             "type": "direct",  # тип параметра.
@@ -383,6 +392,7 @@ hevc265 = Codec(
             "context": "global",
             "resettable": False,
         },
+
         "container": {
             "type": "choice",
             "label": "Container",
@@ -396,6 +406,17 @@ hevc265 = Codec(
             "resettable": False
         },
 
+        "uneven scale fix": {
+            "type": "choice",
+            "label": "Uneven Scale Fix",
+            "help": "This codec needs height and width to be even numbers",
+            "choices": [
+                {"label": "Add 1px padding (preferable)", "command_value": helpers.ResolutionFixer.PAD},
+                {"label": "Crop 1px", "command_value": helpers.ResolutionFixer.CROP},
+                {"label": "Don't change", "command_value": helpers.DONT_CHANGE_STRING}
+            ],
+            "context": "video filters",
+            "resettable": False
+        }
     }
-
 )

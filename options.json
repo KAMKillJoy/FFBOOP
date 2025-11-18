@@ -13,12 +13,13 @@
   "svt-av1": {
     "crf": 22,
     "scale": "don't change",
-    "preset": "5",
+    "preset": "6",
     "fps": "don't change",
     "pixel_format": "yuv420p",
     "container": "mp4",
     "audio codec": "libopus",
-    "audio bitrate": "128k"
+    "audio bitrate": "128k",
+    "uneven scale fix": "pad=width=ceil(iw/2)*2:height=ceil(ih/2)*2"
   },
   "hevc": {
     "crf": 23,
@@ -29,6 +30,7 @@
     "passes": "Two-Pass",
     "container": "mp4",
     "audio codec": "libopus",
-    "audio bitrate": "128k"
+    "audio bitrate": "128k",
+    "uneven scale fix": "pad=width=ceil(iw/2)*2:height=ceil(ih/2)*2"
   }
 }

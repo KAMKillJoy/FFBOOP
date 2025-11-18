@@ -60,9 +60,6 @@ def main(preselected_codec=None, skip_menu: bool = False):
     # Загружаем стандартные значения
     settings = helpers.load_options(codec.name)
 
-    if codec.even_res and "scale_fix" not in settings:
-        settings["scale_fix"] = "pad"
-
     # Меню для настройки параметров
     if not skip_menu and not args.skip_menu:
         menu = Menu(codec, settings)
