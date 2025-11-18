@@ -59,7 +59,7 @@ class Commander:
                 params_list.append(f"{val}")
 
         o_string = f'{option_flag} {f"{join_sep}".join(params_list)}' if params_list else ""
-        return o_string
+        return o_string.strip()
 
     def __build_video_filters_substr(self):
         video_filters = self.__build_options_string("video filters", "-vf", "=", ",")
