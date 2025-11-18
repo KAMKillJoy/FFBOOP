@@ -53,9 +53,10 @@ class Commander:
             if not val or val == helpers.DONT_CHANGE_STRING:
                 continue
             flag = value.get("flag")
-            if not flag:
-                continue
-            params_list.append(f"{flag}{kv_separator}{val}")
+            if flag:
+                params_list.append(f"{flag}{kv_separator}{val}")
+            else:
+                params_list.append(f"{val}")
 
         o_string = f'{option_flag} {f"{join_sep}".join(params_list)}' if params_list else ""
         return o_string
@@ -75,7 +76,6 @@ class Commander:
     def build_ffmpeg_command(self, file: str, output_dir) -> str:
         """
         Генерация ffmpeg команды для одного файла с учётом настроек.
-        Универсальная для любого кодека, использует codec.vcodec/acodec.
         """
 
         filename, ext = os.path.splitext(os.path.basename(file))
