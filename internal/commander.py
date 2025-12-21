@@ -50,7 +50,7 @@ class Commander:
             val = self.settings.get(key)
             if key in exclude:
                 continue
-            if not val or val == helpers.DONT_CHANGE_STRING:
+            if val is None or val == helpers.DONT_CHANGE_STRING:
                 continue
             flag = value.get("flag")
             if flag:
@@ -96,7 +96,10 @@ class Commander:
             cmd = (
                 f'ffmpeg -y '
                 f'-i "{file}" '
-                f'{video_filters} {audio_filters} {global_options} '
+                f'{video_filters} '
+                f'-c:v {self.codec.vcodec} '
+                f'{audio_filters} '
+                f'{global_options} '
                 f'"{output_file}_1pass.{container}"'
             )
         else:  # passes == "Two-Pass"
@@ -104,13 +107,18 @@ class Commander:
                                                                   helpers.FIRST_PASS_SKIP_PARAMS)
             cmd1 = (f'ffmpeg -y '
                     f'-i "{file}" '
-                    f'{video_filters} {global_options_wo_audio} '
+                    f'{video_filters} '
+                    f'-c:v {self.codec.vcodec} '
+                    f'{global_options_wo_audio} '
                     f'-pass 1 -an -f null {helpers.os_adapter.NULL_DEVICE} '
                     )
 
             cmd2 = (f'ffmpeg -y '
                     f'-i "{file}" '
-                    f'{video_filters} {audio_filters} {global_options} '
+                    f'{video_filters} '
+                    f'-c:v {self.codec.vcodec} '
+                    f'{audio_filters} '
+                    f'{global_options} '
                     f'"{output_file}_2pass.{container}"'
                     )
 
