@@ -73,6 +73,10 @@ class Commander:
         global_options = self.__build_options_string("global", "", " ", " ")
         return global_options
 
+    def __build_svtav1_params_filters_substr(self):
+        svtav1_params = "-svtav1-params " + self.__build_options_string("svtav1-params", "", "=", ":")
+        return svtav1_params
+
     def build_ffmpeg_command(self, file: str, output_dir) -> str:
         """
         Генерация ffmpeg команды для одного файла с учётом настроек.
@@ -82,10 +86,14 @@ class Commander:
         param_for_name = f'_q{self.settings.get("crf")}'  # магические литералы, может исправлю.
         passes = self.settings.get("passes")
         container = self.settings.get("container")
-
+        codec = self.codec.vcodec
         video_filters = self.__build_video_filters_substr()
         audio_filters = self.__build_audio_filters_substr()
         global_options = self.__build_global_filters_substr()
+
+        if self.codec.vcodec == "libsvtav1":
+            svtav1_params = self.__build_svtav1_params_filters_substr()
+            global_options += f" {svtav1_params}"
 
         output_file = os.path.join(output_dir, f'{filename}_{self.codec.name}{param_for_name}')
 
@@ -97,7 +105,7 @@ class Commander:
                 f'ffmpeg -y '
                 f'-i "{file}" '
                 f'{video_filters} '
-                f'-c:v {self.codec.vcodec} '
+                f'-c:v {codec} '
                 f'{audio_filters} '
                 f'{global_options} '
                 f'"{output_file}_1pass.{container}"'

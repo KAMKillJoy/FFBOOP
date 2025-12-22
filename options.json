@@ -11,9 +11,10 @@
     "audio bitrate": "128k"
   },
   "svt-av1": {
-    "crf": 22,
+    "crf": 27,
     "scale": "don't change",
-    "preset": "6",
+    "preset": "5",
+	"tune": "3",
     "fps": "don't change",
     "pixel_format": "yuv420p",
     "container": "mp4",

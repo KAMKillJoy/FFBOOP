@@ -212,6 +212,21 @@ svt_av1 = Codec(
             "resettable": False
         },
 
+        "tune": {
+            "type": "choice",
+            "label": "Tune (Visual quality metric)",
+            "help": "Select the quality metric to optimize visual quality",
+            "choices": [
+                {"label": "Visual Quality", "command_value": "0"},
+                {"label": "PSNR (default)", "command_value": "1"},
+                {"label": "SSIM", "command_value": "2"},
+                {"label": "IQ (Image Quality)", "command_value": "3"}
+            ],
+            "flag": "tune",  # будет использован внутри -svtav1-params
+            "context": "svtav1-params",  # SVT-специфичный параметр
+            "resettable": False
+        },
+
         "pixel_format": {
             "type": "choice",
             "label": "Pixel Format",
