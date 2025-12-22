@@ -3,6 +3,7 @@
     "crf": 35,
     "scale": "don't change",
     "deadline": "good",
+	"tune": "-1",
     "fps": "don't change",
     "pixel_format": "yuv420p",
     "passes": "Two-Pass",

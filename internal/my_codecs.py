@@ -93,6 +93,20 @@ vp9 = Codec(
             "resettable": False
         },
 
+        "tune": {
+            "type": "choice",
+            "label": "Tune (Visual quality metric)",
+            "help": "Select the quality metric to optimize visual quality",
+            "choices": [
+                {"label": "Nothing (default)", "command_value": "-1"},
+                {"label": "PSNR", "command_value": "0"},
+                {"label": "SSIM", "command_value": "1"}
+            ],
+            "flag": "-tune",
+            "context": "global",
+            "resettable": False
+        },
+
         "pixel_format": {
             "type": "choice",
             "label": "Pixel Format",
