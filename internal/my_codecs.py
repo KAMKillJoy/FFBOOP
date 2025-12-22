@@ -98,9 +98,9 @@ vp9 = Codec(
             "label": "Tune (Visual quality metric)",
             "help": "Select the quality metric to optimize visual quality",
             "choices": [
-                {"label": "Nothing (default)", "command_value": "-1"},
-                {"label": "PSNR", "command_value": "0"},
-                {"label": "SSIM", "command_value": "1"}
+                {"label": "Nothing (-1) (default)", "command_value": "-1"},
+                {"label": "PSNR (0)", "command_value": "0"},
+                {"label": "SSIM (1)", "command_value": "1"}
             ],
             "flag": "-tune",
             "context": "global",
@@ -231,10 +231,10 @@ svt_av1 = Codec(
             "label": "Tune (Visual quality metric)",
             "help": "Select the quality metric to optimize visual quality",
             "choices": [
-                {"label": "Visual Quality", "command_value": "0"},
-                {"label": "PSNR (default)", "command_value": "1"},
-                {"label": "SSIM", "command_value": "2"},
-                {"label": "IQ (Image Quality)", "command_value": "3"}
+                {"label": "Visual Quality (0)", "command_value": "0"},
+                {"label": "PSNR (1) (default)", "command_value": "1"},
+                {"label": "SSIM (2)", "command_value": "2"},
+                {"label": "IQ (Image Quality) (3)", "command_value": "3"}
             ],
             "flag": "tune",  # будет использован внутри -svtav1-params
             "context": "svtav1-params",  # SVT-специфичный параметр
