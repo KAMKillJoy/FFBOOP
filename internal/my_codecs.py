@@ -351,6 +351,20 @@ hevc265 = Codec(
             "resettable": True,
         },
 
+        "tune": {
+            "type": "choice",
+            "label": "Tune (Visual quality metric)",
+            "help": "Select the quality metric to optimize visual quality",
+            "choices": [
+                {"label": "None", "command_value": helpers.DONT_CHANGE_STRING},
+                {"label": "Grain – preserves the grain structure in old, grainy film material ",
+                 "command_value": "grain"}
+            ],
+            "flag": "-tune",
+            "context": "global",
+            "resettable": True
+        },
+
         "preset": {
             "type": "choice",
             "label": "Preset (Compression efficiency)",

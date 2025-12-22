@@ -27,6 +27,7 @@
     "crf": 23,
     "scale": "don't change",
     "preset": "medium",
+	"tune": "don't change",
     "fps": "don't change",
     "pixel_format": "yuv420p",
     "passes": "Two-Pass",
