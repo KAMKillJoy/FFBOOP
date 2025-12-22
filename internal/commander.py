@@ -111,8 +111,10 @@ class Commander:
                 f'"{output_file}_1pass.{container}"'
             )
         else:  # passes == "Two-Pass"
-            global_options_wo_audio = self.__build_options_string("global", "", " ",
-                                                                  helpers.FIRST_PASS_SKIP_PARAMS)
+            global_options_wo_audio = self.__build_options_string("global",
+                                                                  "", " ",
+                                                                  " ",
+                                                                  exclude=helpers.FIRST_PASS_SKIP_PARAMS)
             cmd1 = (f'ffmpeg -y '
                     f'-i "{file}" '
                     f'{video_filters} '
