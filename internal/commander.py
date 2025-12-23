@@ -73,9 +73,13 @@ class Commander:
         global_options = self.__build_options_string("global", "", " ", " ")
         return global_options
 
-    def __build_svtav1_params_filters_substr(self):
-        svtav1_params = "-svtav1-params " + self.__build_options_string("svtav1-params", "", "=", ":")
-        return svtav1_params
+    def __build_special_codec_parameters_substr(self):
+        special_codec_parameters = self.__build_options_string("special codec parameters", "", "=", ":")
+        return f"{self.codec.special_codec_parameters_flag} {special_codec_parameters}" if special_codec_parameters else ""
+
+    @staticmethod
+    def _join(parts: list[str]) -> str:
+        return ' '.join(p for p in parts if p)
 
     def build_ffmpeg_command(self, file: str, output_dir) -> str:
         """
@@ -90,10 +94,7 @@ class Commander:
         video_filters = self.__build_video_filters_substr()
         audio_filters = self.__build_audio_filters_substr()
         global_options = self.__build_global_filters_substr()
-
-        if self.codec.vcodec == "libsvtav1":
-            svtav1_params = self.__build_svtav1_params_filters_substr()
-            global_options += f" {svtav1_params}"
+        special_codec_parameters = self.__build_special_codec_parameters_substr()
 
         output_file = os.path.join(output_dir, f'{filename}_{self.codec.name}{param_for_name}')
 
@@ -101,36 +102,43 @@ class Commander:
             raise ValueError(f"Passes should be one of 'One-Pass', 'Two-Pass'")
 
         elif passes in ("One-Pass", None):
-            cmd = (
-                f'ffmpeg -y '
-                f'-i "{file}" '
-                f'{video_filters} '
-                f'-c:v {codec} '
-                f'{audio_filters} '
-                f'{global_options} '
+            cmd_parts = [
+                'ffmpeg -y',
+                f'-i "{file}"',
+                video_filters,
+                f'-c:v {codec}',
+                special_codec_parameters,
+                audio_filters,
+                global_options,
                 f'"{output_file}_1pass.{container}"'
-            )
+            ]
+            cmd = self._join(cmd_parts)
         else:  # passes == "Two-Pass"
             global_options_wo_audio = self.__build_options_string("global",
                                                                   "", " ",
                                                                   " ",
                                                                   exclude=helpers.FIRST_PASS_SKIP_PARAMS)
-            cmd1 = (f'ffmpeg -y '
-                    f'-i "{file}" '
-                    f'{video_filters} '
-                    f'-c:v {self.codec.vcodec} '
-                    f'{global_options_wo_audio} '
-                    f'-pass 1 -an -f null {helpers.os_adapter.NULL_DEVICE} '
-                    )
+            cmd1_parts = ['ffmpeg -y',
+                          f'-i "{file}"',
+                          video_filters,
+                          f'-c:v {codec}',
+                          special_codec_parameters,
+                          global_options_wo_audio,
+                          f'-pass 1 -an -f null {helpers.os_adapter.NULL_DEVICE}'
+                          ]
 
-            cmd2 = (f'ffmpeg -y '
-                    f'-i "{file}" '
-                    f'{video_filters} '
-                    f'-c:v {self.codec.vcodec} '
-                    f'{audio_filters} '
-                    f'{global_options} '
-                    f'"{output_file}_2pass.{container}"'
-                    )
+            cmd2_parts = ['ffmpeg -y',
+                          f'-i "{file}"',
+                          video_filters,
+                          f'-c:v {codec}',
+                          special_codec_parameters,
+                          audio_filters,
+                          global_options,
+                          f'"{output_file}_2pass.{container}"'
+                          ]
+
+            cmd1 = self._join(cmd1_parts)
+            cmd2 = self._join(cmd2_parts)
 
             cmd = f'{cmd1} && {cmd2}'
         return cmd

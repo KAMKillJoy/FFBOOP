@@ -15,10 +15,12 @@ class Codec:
     def __init__(
             self,
             name: str = None,
+            special_codec_parameters_flag: str = None,
             params: dict = None,
             vcodec: str = None,
     ):
         self.name = name
+        self.special_codec_parameters_flag = special_codec_parameters_flag
         self.params = params
         self.vcodec = vcodec
 
@@ -178,6 +180,7 @@ vp9 = Codec(
 svt_av1 = Codec(
     name="svt-av1",
     vcodec="libsvtav1",
+    special_codec_parameters_flag = "-svtav1-params",
     params={
         "crf": {
             "type": "direct",  # тип параметра.
@@ -237,7 +240,7 @@ svt_av1 = Codec(
                 {"label": "IQ (Image Quality) (3)", "command_value": "3"}
             ],
             "flag": "tune",  # будет использован внутри -svtav1-params
-            "context": "svtav1-params",  # SVT-специфичный параметр
+            "context": "special codec parameters",  # SVT-специфичный параметр
             "resettable": False
         },
 
