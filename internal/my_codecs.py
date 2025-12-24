@@ -55,7 +55,7 @@ vp9 = Codec(
             "allowed": [str(i) for i in range(0, 64)],  # допустимые значения.
             # !Участвует в проверке input in allowed, а input всегда строка!
 
-            "flag": "-crf",  # флаг этого параметра в строке ffmpeg
+            "cli_flag": "-crf",  # флаг этого параметра в строке ffmpeg
             "context": "video codec options",
             # место этого параметра в строке ffmpeg (video filters, audio filters, global, special)
             "resettable": False,
@@ -66,7 +66,7 @@ vp9 = Codec(
             "type": "handled",
             "label": "Scale",
             "help": "Resize video.",
-            "flag": "scale",
+            "cli_flag": "scale",
             "context": "video filters",
             "resettable": True,
         },
@@ -87,8 +87,8 @@ vp9 = Codec(
                 {"label": "gauss (gaussian filter, slow)", "command_value": "gauss"},
                 {"label": "sinc (high quality, slowest)", "command_value": "sinc"}
             ],
-            "flag": None,
-            "context": "scale filter",
+            "cli_flag": None,
+            "context": "scale flag",
             "resettable": False
         },
 
@@ -96,7 +96,7 @@ vp9 = Codec(
             "type": "direct",
             "label": "FPS",
             "help": "Enter desired FPS.",
-            "flag": "fps",
+            "cli_flag": "fps",
             "context": "video filters",
             "resettable": True,
         },
@@ -111,7 +111,7 @@ vp9 = Codec(
                  "command_value": "best"},
                 {"label": "realtime: recommended for live / fast encoding", "command_value": "realtime"}
             ],
-            "flag": "-deadline",
+            "cli_flag": "-deadline",
             "context": "video codec options",
             "resettable": False
         },
@@ -125,7 +125,7 @@ vp9 = Codec(
                 {"label": "PSNR (0)", "command_value": "0"},
                 {"label": "SSIM (1)", "command_value": "1"}
             ],
-            "flag": "-tune",
+            "cli_flag": "-tune",
             "context": "video codec options",
             "resettable": False
         },
@@ -139,7 +139,7 @@ vp9 = Codec(
                 {"label": "yuv422p (10 bit)", "command_value": "yuv422p"},
                 {"label": "yuv444p (12 bit)", "command_value": "yuv444p"}
             ],
-            "flag": "-pix_fmt",
+            "cli_flag": "-pix_fmt",
             "context": "video codec options",
             "resettable": True
         },
@@ -165,7 +165,7 @@ vp9 = Codec(
                 {"label": "libvorbis", "command_value": "libvorbis"},
                 {"label": "aac", "command_value": "aac"}
             ],
-            "flag": "-c:a",
+            "cli_flag": "-c:a",
             "context": "audio codec",
             "resettable": False
         },
@@ -175,7 +175,7 @@ vp9 = Codec(
             "label": "Audio Bitrate",
             "help": "Enter audio bitrate."
                     "\nUse k for kbps, M for Mbps",
-            "flag": "-b:a",
+            "cli_flag": "-b:a",
             "context": "audio codec options",
             "resettable": False,
         },
@@ -214,7 +214,7 @@ svt_av1 = Codec(
             "allowed": [str(i) for i in range(0, 64)],  # допустимые значения.
             # !Участвует в проверке input in allowed, а input всегда строка!
 
-            "flag": "-crf",  # флаг этого параметра в строке ffmpeg
+            "cli_flag": "-crf",  # флаг этого параметра в строке ffmpeg
             "context": "video codec options",
             # место этого параметра в строке ffmpeg (video filters, audio filters, global, special)
             "resettable": False,
@@ -225,7 +225,7 @@ svt_av1 = Codec(
             "type": "handled",
             "label": "Scale",
             "help": "Resize video.",
-            "flag": "scale",
+            "cli_flag": "scale",
             "context": "video filters",
             "resettable": True,
         },
@@ -246,8 +246,8 @@ svt_av1 = Codec(
                 {"label": "gauss (gaussian filter, slow)", "command_value": "gauss"},
                 {"label": "sinc (high quality, slowest)", "command_value": "sinc"}
             ],
-            "flag": None,
-            "context": "scale filter",
+            "cli_flag": None,
+            "context": "scale flag",
             "resettable": False
         },
 
@@ -255,7 +255,7 @@ svt_av1 = Codec(
             "type": "direct",
             "label": "FPS",
             "help": "Enter desired FPS.",
-            "flag": "fps",
+            "cli_flag": "fps",
             "context": "video filters",
             "resettable": True,
         },
@@ -266,7 +266,7 @@ svt_av1 = Codec(
             "help": "Compression efficiency. 0-13. Lower is better."
                     "\nPreset 13 is only meant for debugging and running fast convex-hull encoding",
             "allowed": [str(i) for i in range(0, 14)],
-            "flag": "-preset",
+            "cli_flag": "-preset",
             "context": "video codec options",
             "resettable": False
         },
@@ -281,7 +281,7 @@ svt_av1 = Codec(
                 {"label": "SSIM (2)", "command_value": "2"},
                 {"label": "IQ (Image Quality) (3)", "command_value": "3"}
             ],
-            "flag": "tune",  # будет использован внутри -svtav1-params
+            "cli_flag": "tune",  # будет использован внутри -svtav1-params
             "context": "special codec parameters",  # SVT-специфичный параметр
             "resettable": False
         },
@@ -295,7 +295,7 @@ svt_av1 = Codec(
                 {"label": "yuv422p (10 bit)", "command_value": "yuv422p"},
                 {"label": "yuv444p (12 bit)", "command_value": "yuv444p"}
             ],
-            "flag": "-pix_fmt",
+            "cli_flag": "-pix_fmt",
             "context": "video codec options",
             "resettable": True
         },
@@ -311,7 +311,7 @@ svt_av1 = Codec(
                 {"label": "libvorbis", "command_value": "libvorbis"},
                 {"label": "aac", "command_value": "aac"}
             ],
-            "flag": "-c:a",
+            "cli_flag": "-c:a",
             "context": "audio codec",
             "resettable": False
         },
@@ -320,7 +320,7 @@ svt_av1 = Codec(
             "type": "direct",
             "label": "Audio Bitrate",
             "help": "Enter audio bitrate",
-            "flag": "-b:a",
+            "cli_flag": "-b:a",
             "context": "audio codec options",
             "resettable": False,
         },
@@ -371,7 +371,7 @@ hevc265 = Codec(
             "allowed": [str(i) for i in range(0, 52)],  # допустимые значения для проверки if in allowed
             # !Участвует в проверке input in allowed, а input всегда строка!
 
-            "flag": "-crf",  # флаг этого параметра в строке ffmpeg
+            "cli_flag": "-crf",  # флаг этого параметра в строке ffmpeg
             "context": "video codec options",
             # место этого параметра в строке ffmpeg (video filters, audio filters, global, special)
             "resettable": False,
@@ -382,7 +382,7 @@ hevc265 = Codec(
             "type": "handled",
             "label": "Scale",
             "help": "Resize video.",
-            "flag": "scale",
+            "cli_flag": "scale",
             "context": "video filters",
             "resettable": True,
         },
@@ -403,8 +403,8 @@ hevc265 = Codec(
                 {"label": "gauss (gaussian filter, slow)", "command_value": "gauss"},
                 {"label": "sinc (high quality, slowest)", "command_value": "sinc"}
             ],
-            "flag": None,
-            "context": "scale filter",
+            "cli_flag": None,
+            "context": "scale flag",
             "resettable": False
         },
 
@@ -412,7 +412,7 @@ hevc265 = Codec(
             "type": "direct",
             "label": "FPS",
             "help": "Enter desired FPS.",
-            "flag": "fps",
+            "cli_flag": "fps",
             "context": "video filters",
             "resettable": True,
         },
@@ -426,7 +426,7 @@ hevc265 = Codec(
                 {"label": "Grain – preserves the grain structure in old, grainy film material ",
                  "command_value": "grain"}
             ],
-            "flag": "-tune",
+            "cli_flag": "-tune",
             "context": "video codec options",
             "resettable": True
         },
@@ -447,7 +447,7 @@ hevc265 = Codec(
                 {"label": "veryslow", "command_value": "veryslow"},
                 {"label": "placebo", "command_value": "placebo"}
             ],
-            "flag": "-preset",
+            "cli_flag": "-preset",
             "context": "video codec options",
             "resettable": False
         },
@@ -461,7 +461,7 @@ hevc265 = Codec(
                 {"label": "yuv422p (10 bit)", "command_value": "yuv422p"},
                 {"label": "yuv444p (12 bit)", "command_value": "yuv444p"}
             ],
-            "flag": "-pix_fmt",
+            "cli_flag": "-pix_fmt",
             "context": "video codec options",
             "resettable": True
         },
@@ -487,7 +487,7 @@ hevc265 = Codec(
                 {"label": "libvorbis", "command_value": "libvorbis"},
                 {"label": "aac", "command_value": "aac"}
             ],
-            "flag": "-c:a",
+            "cli_flag": "-c:a",
             "context": "audio codec",
             "resettable": False
         },
@@ -497,7 +497,7 @@ hevc265 = Codec(
             "label": "Audio Bitrate",
             "help": "Enter audio bitrate."
                     "\nUse k for kbps, M for Mbps",
-            "flag": "-b:a",
+            "cli_flag": "-b:a",
             "context": "audio codec options",
             "resettable": False,
         },

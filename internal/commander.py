@@ -18,6 +18,37 @@ class Commander:
         return {key: value
                 for key, value in params.items() if isinstance(value, dict) and value.get("context") == context}
 
+    def __build_flags_string(self,
+                             context: str,
+                             option_flag: str = "",
+                             kv_separator: str = "=",
+                             join_sep: str = ":",
+                             exclude: tuple[str, ...] = ()
+                             ) -> str:
+        """
+        Формирует строку флагов для конкретного параметра.
+
+        Аргументы:
+            context: Имя параметра, для которого собираем флаги (например, "scale").
+            option_flag: CLI-флаг перед набором флагов (например, "-vf").
+            kv_separator: Разделитель между ключом и значением (например, "=").
+            join_sep: Разделитель между несколькими флагами (например, ":").
+            exclude: Ключи, которые нужно пропустить.
+
+        Возвращает:
+            str: Строка с флагами для ffmpeg, готовая к вставке.
+        """
+        flags_list = []
+        flags = self.__parse_params(context)
+        for key, value in flags.items():
+            val = self.settings.get(key)
+            if key in exclude or val is None or val == helpers.DONT_CHANGE_STRING:
+                continue
+            cli_flag = value.get("cli_flag")
+            flags_list.append(f"{cli_flag}{kv_separator}{val}" if cli_flag else str(val))
+
+        return f'{option_flag} {join_sep.join(flags_list)}'.strip() if flags_list else ""
+
     def __build_options_string(self,
                                context: str,
                                option_flag: str,
@@ -52,9 +83,14 @@ class Commander:
                 continue
             if val is None or val == helpers.DONT_CHANGE_STRING:
                 continue
-            flag = value.get("flag")
-            if flag:
-                params_list.append(f"{flag}{kv_separator}{val}")
+            flag_context = f"{key} flag"
+            flags_string = self.__build_flags_string(flag_context)
+            if flags_string:
+                val += f":flags={flags_string}"
+
+            cli_flag = value.get("cli_flag")
+            if cli_flag:
+                params_list.append(f"{cli_flag}{kv_separator}{val}")
             else:
                 params_list.append(f"{val}")
 
@@ -62,20 +98,7 @@ class Commander:
         return o_string.strip()
 
     def __build_video_filters_substr(self):
-        filters_wo_scale = self.__build_options_string("video filters",
-                                                       "", "=",
-                                                       ",",
-                                                       exclude=("scale",)
-                                                       )
-
-        scale_param = self.settings.get("scale")
-        scale_filter = self.settings.get("scale filter")
-        scale_str = None
-        if scale_param and scale_param != helpers.DONT_CHANGE_STRING:
-            scale_str = f"scale={scale_param}" + (f":flags={scale_filter}" if scale_filter else "")
-
-        filters = [f for f in (scale_str, filters_wo_scale) if f]
-        video_filters = f"-vf {','.join(filters)}" if filters else ""
+        video_filters = self.__build_options_string("video filters", "-vf", "=", ",")
         return video_filters
 
     def __build_audio_filters_substr(self):
