@@ -18,13 +18,13 @@ class Commander:
         return {key: value
                 for key, value in params.items() if isinstance(value, dict) and value.get("context") == context}
 
-    def __build_flags_string(self,
-                             context: str,
-                             option_flag: str = "",
-                             kv_separator: str = "=",
-                             join_sep: str = ":",
-                             exclude: tuple[str, ...] = ()
-                             ) -> str:
+    def __build_filter_params_string(self,
+                                     context: str,
+                                     option_flag: str = "",
+                                     kv_separator: str = "=",
+                                     join_sep: str = ":",
+                                     exclude: tuple[str, ...] = ()
+                                     ) -> str:
         """
         Формирует строку флагов для конкретного параметра.
 
@@ -83,10 +83,11 @@ class Commander:
                 continue
             if val is None or val == helpers.DONT_CHANGE_STRING:
                 continue
-            flag_context = f"{key} flag"
-            flags_string = self.__build_flags_string(flag_context)
-            if flags_string:
-                val += f":flags={flags_string}"
+            param_context = f"{key} filter parameter"
+            params_string = self.__build_filter_params_string(param_context)
+            if  params_string:
+                fp_flag = value.get('filter parameters flag') or ':'
+                val += f"{fp_flag}{params_string}"
 
             cli_flag = value.get("cli_flag")
             if cli_flag:

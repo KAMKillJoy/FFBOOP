@@ -67,6 +67,7 @@ vp9 = Codec(
             "label": "Scale",
             "help": "Resize video.",
             "cli_flag": "scale",
+            "filter parameters flag": ":flags=",
             "context": "video filters",
             "resettable": True,
         },
@@ -88,7 +89,7 @@ vp9 = Codec(
                 {"label": "sinc (high quality, slowest)", "command_value": "sinc"}
             ],
             "cli_flag": None,
-            "context": "scale flag",
+            "context": "scale filter parameter",
             "resettable": False
         },
 
@@ -226,6 +227,7 @@ svt_av1 = Codec(
             "label": "Scale",
             "help": "Resize video.",
             "cli_flag": "scale",
+            "filter parameters flag": ":flags=",
             "context": "video filters",
             "resettable": True,
         },
@@ -247,7 +249,7 @@ svt_av1 = Codec(
                 {"label": "sinc (high quality, slowest)", "command_value": "sinc"}
             ],
             "cli_flag": None,
-            "context": "scale flag",
+            "context": "scale filter parameter",
             "resettable": False
         },
 
@@ -383,6 +385,7 @@ hevc265 = Codec(
             "label": "Scale",
             "help": "Resize video.",
             "cli_flag": "scale",
+            "filter parameters flag": ":flags=",
             "context": "video filters",
             "resettable": True,
         },
@@ -404,7 +407,7 @@ hevc265 = Codec(
                 {"label": "sinc (high quality, slowest)", "command_value": "sinc"}
             ],
             "cli_flag": None,
-            "context": "scale flag",
+            "context": "scale filter parameter",
             "resettable": False
         },
 
