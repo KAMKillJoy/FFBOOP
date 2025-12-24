@@ -62,16 +62,37 @@ class Commander:
         return o_string.strip()
 
     def __build_video_filters_substr(self):
-        video_filters = self.__build_options_string("video filters", "-vf", "=", ",")
+        filters_wo_scale = self.__build_options_string("video filters",
+                                                       "", "=",
+                                                       ",",
+                                                       exclude=("scale",)
+                                                       )
+
+        scale_param = self.settings.get("scale")
+        scale_filter = self.settings.get("scale filter")
+        scale_str = None
+        if scale_param and scale_param != helpers.DONT_CHANGE_STRING:
+            scale_str = f"scale={scale_param}" + (f":flags={scale_filter}" if scale_filter else "")
+
+        filters = [f for f in (scale_str, filters_wo_scale) if f]
+        video_filters = f"-vf {','.join(filters)}" if filters else ""
         return video_filters
 
     def __build_audio_filters_substr(self):
         audio_filters = self.__build_options_string("audio filters", "-af", "=", ",")
         return audio_filters
 
-    def __build_global_filters_substr(self):
-        global_options = self.__build_options_string("global", "", " ", " ")
-        return global_options
+    def __build_video_codec_options_substr(self):
+        video_codec_options = self.__build_options_string("video codec options", "", " ", " ")
+        return video_codec_options
+
+    def __build_audio_codec_options_substr(self):
+        audio_codec_options = self.__build_options_string("audio codec options", "", " ", " ")
+        return audio_codec_options
+
+    def __build_audio_codec_substr(self):
+        audio_codec = self.__build_options_string("audio codec", "", " ", " ")
+        return audio_codec
 
     def __build_special_codec_parameters_substr(self):
         special_codec_parameters = self.__build_options_string("special codec parameters", "", "=", ":")
@@ -90,10 +111,13 @@ class Commander:
         param_for_name = f'_q{self.settings.get("crf")}'  # магические литералы, может исправлю.
         passes = self.settings.get("passes")
         container = self.settings.get("container")
-        codec = self.codec.vcodec
+        video_codec = self.codec.vcodec
+        audio_codec = self.__build_audio_codec_substr()
+        video_codec_options = self.__build_video_codec_options_substr()
         video_filters = self.__build_video_filters_substr()
+        audio_codec_options = self.__build_audio_codec_options_substr()
         audio_filters = self.__build_audio_filters_substr()
-        global_options = self.__build_global_filters_substr()
+
         special_codec_parameters = self.__build_special_codec_parameters_substr()
 
         output_file = os.path.join(output_dir, f'{filename}_{self.codec.name}{param_for_name}')
@@ -104,38 +128,62 @@ class Commander:
         elif passes in ("One-Pass", None):
             cmd_parts = [
                 'ffmpeg -y',
+
+                # INPUT
                 f'-i "{file}"',
+
+                # VIDEO
                 video_filters,
-                f'-c:v {codec}',
+                f'-c:v {video_codec}',
+                video_codec_options,
                 special_codec_parameters,
+
+                # AUDIO
                 audio_filters,
-                global_options,
+                audio_codec,
+                audio_codec_options,
+
+                # OUTPUT
                 f'"{output_file}_1pass.{container}"'
             ]
             cmd = self._join(cmd_parts)
         else:  # passes == "Two-Pass"
-            global_options_wo_audio = self.__build_options_string("global",
-                                                                  "", " ",
-                                                                  " ",
-                                                                  exclude=helpers.FIRST_PASS_SKIP_PARAMS)
-            cmd1_parts = ['ffmpeg -y',
-                          f'-i "{file}"',
-                          video_filters,
-                          f'-c:v {codec}',
-                          special_codec_parameters,
-                          global_options_wo_audio,
-                          f'-pass 1 -an -f null {helpers.os_adapter.NULL_DEVICE}'
-                          ]
+            cmd1_parts = [
+                'ffmpeg -y',
 
-            cmd2_parts = ['ffmpeg -y',
-                          f'-i "{file}"',
-                          video_filters,
-                          f'-c:v {codec}',
-                          special_codec_parameters,
-                          audio_filters,
-                          global_options,
-                          f'"{output_file}_2pass.{container}"'
-                          ]
+                # INPUT
+                f'-i "{file}"',
+
+                # VIDEO
+                video_filters,
+                f'-c:v {video_codec}',
+                video_codec_options,
+                special_codec_parameters,
+
+                # OUTPUT
+                f'-pass 1 -an -f null {helpers.os_adapter.NULL_DEVICE}'
+            ]
+
+            cmd2_parts = [
+                'ffmpeg -y',
+
+                # INPUT
+                f'-i "{file}"',
+
+                # VIDEO
+                video_filters,
+                f'-c:v {video_codec}',
+                video_codec_options,
+                special_codec_parameters,
+
+                # AUDIO
+                audio_filters,
+                audio_codec,
+                audio_codec_options,
+
+                # OUTPUT
+                f'"{output_file}_2pass.{container}"'
+            ]
 
             cmd1 = self._join(cmd1_parts)
             cmd2 = self._join(cmd2_parts)

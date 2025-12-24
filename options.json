@@ -2,6 +2,7 @@
   "vp9": {
     "crf": 35,
     "scale": "don't change",
+    "scale filter": "area",
     "deadline": "good",
 	"tune": "-1",
     "fps": "don't change",
@@ -14,6 +15,7 @@
   "svt-av1": {
     "crf": 27,
     "scale": "don't change",
+    "scale filter": "area",
     "preset": "5",
 	"tune": "3",
     "fps": "don't change",
@@ -26,6 +28,7 @@
   "hevc": {
     "crf": 23,
     "scale": "don't change",
+    "scale filter": "area",
     "preset": "medium",
 	"tune": "don't change",
     "fps": "don't change",

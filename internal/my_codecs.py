@@ -56,7 +56,7 @@ vp9 = Codec(
             # !Участвует в проверке input in allowed, а input всегда строка!
 
             "flag": "-crf",  # флаг этого параметра в строке ffmpeg
-            "context": "global",
+            "context": "video codec options",
             # место этого параметра в строке ffmpeg (video filters, audio filters, global, special)
             "resettable": False,
             # сбрасываемое ли? Если да, то принимается "r" или "reset" чтобы не менять этот параметр при рендере
@@ -69,6 +69,27 @@ vp9 = Codec(
             "flag": "scale",
             "context": "video filters",
             "resettable": True,
+        },
+
+        "scale filter": {
+            "type": "choice",
+            "label": "Scale Filter",
+            "help": "Select scale filter (if you scaling)",
+            "choices": [
+                {"label": "fast bilinear (fastest, low quality)", "command_value": "fast_bilinear"},
+                {"label": "bilinear (default)", "command_value": "bilinear"},
+                {"label": "bicubic (slower, smoother)", "command_value": "bicubic"},
+                {"label": "experimental neighbor (nearest neighbor, blocky)", "command_value": "neighbor"},
+                {"label": "area (good for downscaling)", "command_value": "area"},
+                {"label": "bicublin (improved bicubic, slower)", "command_value": "bicublin"},
+                {"label": "lanczos (high quality, slower)", "command_value": "lanczos"},
+                {"label": "spline (smooth, slow)", "command_value": "spline"},
+                {"label": "gauss (gaussian filter, slow)", "command_value": "gauss"},
+                {"label": "sinc (high quality, slowest)", "command_value": "sinc"}
+            ],
+            "flag": None,
+            "context": "scale filter",
+            "resettable": False
         },
 
         "fps": {
@@ -91,7 +112,7 @@ vp9 = Codec(
                 {"label": "realtime: recommended for live / fast encoding", "command_value": "realtime"}
             ],
             "flag": "-deadline",
-            "context": "global",
+            "context": "video codec options",
             "resettable": False
         },
 
@@ -105,7 +126,7 @@ vp9 = Codec(
                 {"label": "SSIM (1)", "command_value": "1"}
             ],
             "flag": "-tune",
-            "context": "global",
+            "context": "video codec options",
             "resettable": False
         },
 
@@ -119,7 +140,7 @@ vp9 = Codec(
                 {"label": "yuv444p (12 bit)", "command_value": "yuv444p"}
             ],
             "flag": "-pix_fmt",
-            "context": "global",
+            "context": "video codec options",
             "resettable": True
         },
 
@@ -145,7 +166,7 @@ vp9 = Codec(
                 {"label": "aac", "command_value": "aac"}
             ],
             "flag": "-c:a",
-            "context": "global",
+            "context": "audio codec",
             "resettable": False
         },
 
@@ -155,7 +176,7 @@ vp9 = Codec(
             "help": "Enter audio bitrate."
                     "\nUse k for kbps, M for Mbps",
             "flag": "-b:a",
-            "context": "global",
+            "context": "audio codec options",
             "resettable": False,
         },
 
@@ -180,7 +201,7 @@ vp9 = Codec(
 svt_av1 = Codec(
     name="svt-av1",
     vcodec="libsvtav1",
-    special_codec_parameters_flag = "-svtav1-params",
+    special_codec_parameters_flag="-svtav1-params",
     params={
         "crf": {
             "type": "direct",  # тип параметра.
@@ -194,7 +215,7 @@ svt_av1 = Codec(
             # !Участвует в проверке input in allowed, а input всегда строка!
 
             "flag": "-crf",  # флаг этого параметра в строке ffmpeg
-            "context": "global",
+            "context": "video codec options",
             # место этого параметра в строке ffmpeg (video filters, audio filters, global, special)
             "resettable": False,
             # сбрасываемое ли? Если да, то принимается "r" или "reset" чтобы не менять этот параметр при рендере
@@ -207,6 +228,27 @@ svt_av1 = Codec(
             "flag": "scale",
             "context": "video filters",
             "resettable": True,
+        },
+
+        "scale filter": {
+            "type": "choice",
+            "label": "Scale Filter",
+            "help": "Select scale filter (if you scaling)",
+            "choices": [
+                {"label": "fast bilinear (fastest, low quality)", "command_value": "fast_bilinear"},
+                {"label": "bilinear (default)", "command_value": "bilinear"},
+                {"label": "bicubic (slower, smoother)", "command_value": "bicubic"},
+                {"label": "experimental neighbor (nearest neighbor, blocky)", "command_value": "neighbor"},
+                {"label": "area (good for downscaling)", "command_value": "area"},
+                {"label": "bicublin (improved bicubic, slower)", "command_value": "bicublin"},
+                {"label": "lanczos (high quality, slower)", "command_value": "lanczos"},
+                {"label": "spline (smooth, slow)", "command_value": "spline"},
+                {"label": "gauss (gaussian filter, slow)", "command_value": "gauss"},
+                {"label": "sinc (high quality, slowest)", "command_value": "sinc"}
+            ],
+            "flag": None,
+            "context": "scale filter",
+            "resettable": False
         },
 
         "fps": {
@@ -225,7 +267,7 @@ svt_av1 = Codec(
                     "\nPreset 13 is only meant for debugging and running fast convex-hull encoding",
             "allowed": [str(i) for i in range(0, 14)],
             "flag": "-preset",
-            "context": "global",
+            "context": "video codec options",
             "resettable": False
         },
 
@@ -254,7 +296,7 @@ svt_av1 = Codec(
                 {"label": "yuv444p (12 bit)", "command_value": "yuv444p"}
             ],
             "flag": "-pix_fmt",
-            "context": "global",
+            "context": "video codec options",
             "resettable": True
         },
 
@@ -270,7 +312,7 @@ svt_av1 = Codec(
                 {"label": "aac", "command_value": "aac"}
             ],
             "flag": "-c:a",
-            "context": "global",
+            "context": "audio codec",
             "resettable": False
         },
 
@@ -279,7 +321,7 @@ svt_av1 = Codec(
             "label": "Audio Bitrate",
             "help": "Enter audio bitrate",
             "flag": "-b:a",
-            "context": "global",
+            "context": "audio codec options",
             "resettable": False,
         },
 
@@ -330,7 +372,7 @@ hevc265 = Codec(
             # !Участвует в проверке input in allowed, а input всегда строка!
 
             "flag": "-crf",  # флаг этого параметра в строке ffmpeg
-            "context": "global",
+            "context": "video codec options",
             # место этого параметра в строке ffmpeg (video filters, audio filters, global, special)
             "resettable": False,
             # сбрасываемое ли? Если да, то принимается "r" или "reset" чтобы не менять этот параметр при рендере
@@ -343,6 +385,27 @@ hevc265 = Codec(
             "flag": "scale",
             "context": "video filters",
             "resettable": True,
+        },
+
+        "scale filter": {
+            "type": "choice",
+            "label": "Scale Filter",
+            "help": "Select scale filter (if you scaling)",
+            "choices": [
+                {"label": "fast bilinear (fastest, low quality)", "command_value": "fast_bilinear"},
+                {"label": "bilinear (default)", "command_value": "bilinear"},
+                {"label": "bicubic (slower, smoother)", "command_value": "bicubic"},
+                {"label": "experimental neighbor (nearest neighbor, blocky)", "command_value": "neighbor"},
+                {"label": "area (good for downscaling)", "command_value": "area"},
+                {"label": "bicublin (improved bicubic, slower)", "command_value": "bicublin"},
+                {"label": "lanczos (high quality, slower)", "command_value": "lanczos"},
+                {"label": "spline (smooth, slow)", "command_value": "spline"},
+                {"label": "gauss (gaussian filter, slow)", "command_value": "gauss"},
+                {"label": "sinc (high quality, slowest)", "command_value": "sinc"}
+            ],
+            "flag": None,
+            "context": "scale filter",
+            "resettable": False
         },
 
         "fps": {
@@ -364,7 +427,7 @@ hevc265 = Codec(
                  "command_value": "grain"}
             ],
             "flag": "-tune",
-            "context": "global",
+            "context": "video codec options",
             "resettable": True
         },
 
@@ -385,7 +448,7 @@ hevc265 = Codec(
                 {"label": "placebo", "command_value": "placebo"}
             ],
             "flag": "-preset",
-            "context": "global",
+            "context": "video codec options",
             "resettable": False
         },
 
@@ -399,7 +462,7 @@ hevc265 = Codec(
                 {"label": "yuv444p (12 bit)", "command_value": "yuv444p"}
             ],
             "flag": "-pix_fmt",
-            "context": "global",
+            "context": "video codec options",
             "resettable": True
         },
 
@@ -425,7 +488,7 @@ hevc265 = Codec(
                 {"label": "aac", "command_value": "aac"}
             ],
             "flag": "-c:a",
-            "context": "global",
+            "context": "audio codec",
             "resettable": False
         },
 
@@ -435,7 +498,7 @@ hevc265 = Codec(
             "help": "Enter audio bitrate."
                     "\nUse k for kbps, M for Mbps",
             "flag": "-b:a",
-            "context": "global",
+            "context": "audio codec options",
             "resettable": False,
         },
 
