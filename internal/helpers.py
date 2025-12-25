@@ -13,10 +13,6 @@ DONT_CHANGE_STRING = "don't change"
 
 RESETTABLE_HELP_STRING = ' (Input "r" or "reset" to keep original):'
 RESETTING_INPUT_VALUES = ("r", "reset")
-FIRST_PASS_SKIP_PARAMS = (
-    "audio codec",
-    "audio bitrate",
-)
 
 
 class ResolutionFixer:
@@ -35,6 +31,8 @@ def load_options(codec_name: str) -> dict:
     with open(options_path, "r", encoding="utf-8") as f:
         return json.load(f).get(codec_name, {})
 
+def is_skip_param(value):
+    return (value is None) or (value == DONT_CHANGE_STRING)
 
 def create_options_json():
     """

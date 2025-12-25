@@ -1,3 +1,4 @@
+from internal.codec_schema import Context, Type
 from internal import helpers
 
 
@@ -45,7 +46,7 @@ vp9 = Codec(
     vcodec="libvpx-vp9",
     params={
         "crf": {
-            "type": "direct",  # тип параметра.
+            "type": Type.DIRECT.value,  # тип параметра.
             # direct - ввод с клавиатуры,
             # choice - выбор вариантов,
             # handled - ничего конкретного не значит, просто подсказка, что обрабатывается собственным методом.
@@ -56,24 +57,24 @@ vp9 = Codec(
             # !Участвует в проверке input in allowed, а input всегда строка!
 
             "cli_flag": "-crf",  # флаг этого параметра в строке ffmpeg
-            "context": "video codec options",
+            "context": Context.VIDEO_CODEC_OPTION.value,
             # место этого параметра в строке ffmpeg (video filters, audio filters, global, special)
             "resettable": False,
             # сбрасываемое ли? Если да, то принимается "r" или "reset" чтобы не менять этот параметр при рендере
         },
 
         "scale": {
-            "type": "handled",
+            "type": Type.HANDLED.value,
             "label": "Scale",
             "help": "Resize video.",
             "cli_flag": "scale",
             "filter parameters flag": ":flags=",
-            "context": "video filters",
+            "context": Context.VIDEO_FILTER.value,
             "resettable": True,
         },
 
         "scale filter": {
-            "type": "choice",
+            "type": Type.CHOICE.value,
             "label": "Scale Filter",
             "help": "Select scale filter (if you scaling)",
             "choices": [
@@ -89,21 +90,21 @@ vp9 = Codec(
                 {"label": "sinc (high quality, slowest)", "command_value": "sinc"}
             ],
             "cli_flag": None,
-            "context": "scale filter parameter",
+            "context": "scale filter parameter",  # !!!ВЫНЕСТИ В КОНТСТАНТУ!!!
             "resettable": False
         },
 
         "fps": {
-            "type": "direct",
+            "type": Type.DIRECT.value,
             "label": "FPS",
             "help": "Enter desired FPS.",
             "cli_flag": "fps",
-            "context": "video filters",
+            "context": Context.VIDEO_FILTER.value,
             "resettable": True,
         },
 
         "deadline": {
-            "type": "choice",
+            "type": Type.CHOICE.value,
             "label": "Deadline (Compression efficiency)",
             "help": "Deadline (Compression efficiency)",
             "choices": [
@@ -113,12 +114,12 @@ vp9 = Codec(
                 {"label": "realtime: recommended for live / fast encoding", "command_value": "realtime"}
             ],
             "cli_flag": "-deadline",
-            "context": "video codec options",
+            "context": Context.VIDEO_CODEC_OPTION.value,
             "resettable": False
         },
 
         "tune": {
-            "type": "choice",
+            "type": Type.CHOICE.value,
             "label": "Tune (Visual quality metric)",
             "help": "Select the quality metric to optimize visual quality",
             "choices": [
@@ -127,12 +128,12 @@ vp9 = Codec(
                 {"label": "SSIM (1)", "command_value": "1"}
             ],
             "cli_flag": "-tune",
-            "context": "video codec options",
+            "context": Context.VIDEO_CODEC_OPTION.value,
             "resettable": False
         },
 
         "pixel_format": {
-            "type": "choice",
+            "type": Type.CHOICE.value,
             "label": "Pixel Format",
             "help": "Pixel Format. Specifies the color sampling and bit depth of the video (e.g. yuv420p for compatibility).",
             "choices": [
@@ -141,24 +142,24 @@ vp9 = Codec(
                 {"label": "yuv444p (12 bit)", "command_value": "yuv444p"}
             ],
             "cli_flag": "-pix_fmt",
-            "context": "video codec options",
+            "context": Context.VIDEO_CODEC_OPTION.value,
             "resettable": True
         },
 
         "passes": {
-            "type": "choice",
+            "type": Type.CHOICE.value,
             "label": "Passes",
             "help": "Select encoding mode: single-pass (faster) or two-pass (better quality/size).",
             "choices": [
                 {"label": "One-Pass", "command_value": "One-Pass"},
                 {"label": "Two-Pass", "command_value": "Two-Pass"}
             ],
-            "context": "special",
+            "context": Context.SPECIAL.value,
             "resettable": False
         },
 
         "audio codec": {
-            "type": "choice",
+            "type": Type.CHOICE.value,
             "label": "Audio Codec",
             "help": "Select audio codec",
             "choices": [
@@ -167,22 +168,22 @@ vp9 = Codec(
                 {"label": "aac", "command_value": "aac"}
             ],
             "cli_flag": "-c:a",
-            "context": "audio codec",
+            "context": Context.AUDIO_CODEC.value,
             "resettable": False
         },
 
         "audio bitrate": {
-            "type": "direct",
+            "type": Type.DIRECT.value,
             "label": "Audio Bitrate",
             "help": "Enter audio bitrate."
                     "\nUse k for kbps, M for Mbps",
             "cli_flag": "-b:a",
-            "context": "audio codec options",
+            "context": Context.AUDIO_CODEC_OPTION.value,
             "resettable": False,
         },
 
         "container": {
-            "type": "choice",
+            "type": Type.CHOICE.value,
             "label": "Container",
             "help": "Select container:",
             "choices": [
@@ -190,7 +191,7 @@ vp9 = Codec(
                 {"label": "mkv", "command_value": "mkv"},
                 {"label": "mp4", "command_value": "mp4"}
             ],
-            "context": "special",
+            "context": Context.SPECIAL.value,
             "resettable": False
         }
     }
@@ -205,7 +206,7 @@ svt_av1 = Codec(
     special_codec_parameters_flag="-svtav1-params",
     params={
         "crf": {
-            "type": "direct",  # тип параметра.
+            "type": Type.DIRECT.value,  # тип параметра.
             # direct - ввод с клавиатуры,
             # choice - выбор вариантов,
             # handled - ничего конкретного не значит, просто подсказка, что обрабатывается собственным методом.
@@ -216,24 +217,24 @@ svt_av1 = Codec(
             # !Участвует в проверке input in allowed, а input всегда строка!
 
             "cli_flag": "-crf",  # флаг этого параметра в строке ffmpeg
-            "context": "video codec options",
+            "context": Context.VIDEO_CODEC_OPTION.value,
             # место этого параметра в строке ffmpeg (video filters, audio filters, global, special)
             "resettable": False,
             # сбрасываемое ли? Если да, то принимается "r" или "reset" чтобы не менять этот параметр при рендере
         },
 
         "scale": {
-            "type": "handled",
+            "type": Type.HANDLED.value,
             "label": "Scale",
             "help": "Resize video.",
             "cli_flag": "scale",
             "filter parameters flag": ":flags=",
-            "context": "video filters",
+            "context": Context.VIDEO_FILTER.value,
             "resettable": True,
         },
 
         "scale filter": {
-            "type": "choice",
+            "type": Type.CHOICE.value,
             "label": "Scale Filter",
             "help": "Select scale filter (if you scaling)",
             "choices": [
@@ -254,27 +255,27 @@ svt_av1 = Codec(
         },
 
         "fps": {
-            "type": "direct",
+            "type": Type.DIRECT.value,
             "label": "FPS",
             "help": "Enter desired FPS.",
             "cli_flag": "fps",
-            "context": "video filters",
+            "context": Context.VIDEO_FILTER.value,
             "resettable": True,
         },
 
         "preset": {
-            "type": "direct",
+            "type": Type.DIRECT.value,
             "label": "Preset (Compression efficiency)",
             "help": "Compression efficiency. 0-13. Lower is better."
                     "\nPreset 13 is only meant for debugging and running fast convex-hull encoding",
             "allowed": [str(i) for i in range(0, 14)],
             "cli_flag": "-preset",
-            "context": "video codec options",
+            "context": Context.VIDEO_CODEC_OPTION.value,
             "resettable": False
         },
 
         "tune": {
-            "type": "choice",
+            "type": Type.CHOICE.value,
             "label": "Tune (Visual quality metric)",
             "help": "Select the quality metric to optimize visual quality",
             "choices": [
@@ -284,12 +285,12 @@ svt_av1 = Codec(
                 {"label": "IQ (Image Quality) (3)", "command_value": "3"}
             ],
             "cli_flag": "tune",  # будет использован внутри -svtav1-params
-            "context": "special codec parameters",  # SVT-специфичный параметр
+            "context": Context.VIDEO_SPECIAL_CODEC_OPTIONS.value,  # SVT-специфичный параметр
             "resettable": False
         },
 
         "pixel_format": {
-            "type": "choice",
+            "type": Type.CHOICE.value,
             "label": "Pixel Format",
             "help": "Pixel Format. Specifies the color sampling and bit depth of the video (e.g. yuv420p for compatibility).",
             "choices": [
@@ -298,14 +299,14 @@ svt_av1 = Codec(
                 {"label": "yuv444p (12 bit)", "command_value": "yuv444p"}
             ],
             "cli_flag": "-pix_fmt",
-            "context": "video codec options",
+            "context": Context.VIDEO_CODEC_OPTION.value,
             "resettable": True
         },
 
         "audio codec": {
-            "type": "choice",
+            "type": Type.CHOICE.value,
             "label": "Audio Codec",
-            "help": "Enter audio bitrate."
+            "help": "Select audio codec"
                     "\nUse k for kbps, M for Mbps",
 
             "choices": [
@@ -314,21 +315,21 @@ svt_av1 = Codec(
                 {"label": "aac", "command_value": "aac"}
             ],
             "cli_flag": "-c:a",
-            "context": "audio codec",
+            "context": Context.AUDIO_CODEC.value,
             "resettable": False
         },
 
         "audio bitrate": {
-            "type": "direct",
+            "type": Type.DIRECT.value,
             "label": "Audio Bitrate",
             "help": "Enter audio bitrate",
             "cli_flag": "-b:a",
-            "context": "audio codec options",
+            "context": Context.AUDIO_CODEC_OPTION.value,
             "resettable": False,
         },
 
         "container": {
-            "type": "choice",
+            "type": Type.CHOICE.value,
             "label": "Container",
             "help": "Select container:",
             "choices": [
@@ -336,12 +337,12 @@ svt_av1 = Codec(
                 {"label": "mkv", "command_value": "mkv"},
                 {"label": "mp4", "command_value": "mp4"}
             ],
-            "context": "special",
+            "context": Context.SPECIAL.value,
             "resettable": False
         },
 
         "uneven scale fix": {
-            "type": "choice",
+            "type": Type.CHOICE.value,
             "label": "Uneven Scale Fix",
             "help": "This codec needs height and width to be even numbers",
             "choices": [
@@ -349,7 +350,7 @@ svt_av1 = Codec(
                 {"label": "Crop 1px", "command_value": helpers.ResolutionFixer.CROP},
                 {"label": "Do not change", "command_value": helpers.DONT_CHANGE_STRING}
             ],
-            "context": "video filters",
+            "context": Context.VIDEO_FILTER.value,
             "resettable": False
         }
     }
@@ -363,7 +364,7 @@ hevc265 = Codec(
     vcodec="libx265",
     params={
         "crf": {
-            "type": "direct",  # тип параметра.
+            "type": Type.DIRECT.value,  # тип параметра.
             # direct - ввод с клавиатуры,
             # choice - выбор вариантов,
             # handled - ничего конкретного не значит, просто подсказка, что обрабатывается собственным методом.
@@ -374,24 +375,24 @@ hevc265 = Codec(
             # !Участвует в проверке input in allowed, а input всегда строка!
 
             "cli_flag": "-crf",  # флаг этого параметра в строке ffmpeg
-            "context": "video codec options",
+            "context": Context.VIDEO_CODEC_OPTION.value,
             # место этого параметра в строке ffmpeg (video filters, audio filters, global, special)
             "resettable": False,
             # сбрасываемое ли? Если да, то принимается "r" или "reset" чтобы не менять этот параметр при рендере
         },
 
         "scale": {
-            "type": "handled",
+            "type": Type.HANDLED.value,
             "label": "Scale",
             "help": "Resize video.",
             "cli_flag": "scale",
             "filter parameters flag": ":flags=",
-            "context": "video filters",
+            "context": Context.VIDEO_FILTER.value,
             "resettable": True,
         },
 
         "scale filter": {
-            "type": "choice",
+            "type": Type.CHOICE.value,
             "label": "Scale Filter",
             "help": "Select scale filter (if you scaling)",
             "choices": [
@@ -412,16 +413,16 @@ hevc265 = Codec(
         },
 
         "fps": {
-            "type": "direct",
+            "type": Type.DIRECT.value,
             "label": "FPS",
             "help": "Enter desired FPS.",
             "cli_flag": "fps",
-            "context": "video filters",
+            "context": Context.VIDEO_FILTER.value,
             "resettable": True,
         },
 
         "tune": {
-            "type": "choice",
+            "type": Type.CHOICE.value,
             "label": "Tune (Visual quality metric)",
             "help": "Select the quality metric to optimize visual quality",
             "choices": [
@@ -430,12 +431,12 @@ hevc265 = Codec(
                  "command_value": "grain"}
             ],
             "cli_flag": "-tune",
-            "context": "video codec options",
+            "context": Context.VIDEO_CODEC_OPTION.value,
             "resettable": True
         },
 
         "preset": {
-            "type": "choice",
+            "type": Type.CHOICE.value,
             "label": "Preset (Compression efficiency)",
             "help": "Compression efficiency",
             "choices": [
@@ -451,12 +452,12 @@ hevc265 = Codec(
                 {"label": "placebo", "command_value": "placebo"}
             ],
             "cli_flag": "-preset",
-            "context": "video codec options",
+            "context": Context.VIDEO_CODEC_OPTION.value,
             "resettable": False
         },
 
         "pixel_format": {
-            "type": "choice",
+            "type": Type.CHOICE.value,
             "label": "Pixel Format",
             "help": "Pixel Format. Specifies the color sampling and bit depth of the video (e.g. yuv420p for compatibility).",
             "choices": [
@@ -465,24 +466,24 @@ hevc265 = Codec(
                 {"label": "yuv444p (12 bit)", "command_value": "yuv444p"}
             ],
             "cli_flag": "-pix_fmt",
-            "context": "video codec options",
+            "context": Context.VIDEO_CODEC_OPTION.value,
             "resettable": True
         },
 
         "passes": {
-            "type": "choice",
+            "type": Type.CHOICE.value,
             "label": "Passes",
             "help": "Select encoding mode: single-pass (faster) or two-pass (better quality/size).",
             "choices": [
                 {"label": "One-Pass", "command_value": "One-Pass"},
                 {"label": "Two-Pass", "command_value": "Two-Pass"}
             ],
-            "context": "special",
+            "context": Context.SPECIAL.value,
             "resettable": False
         },
 
         "audio codec": {
-            "type": "choice",
+            "type": Type.CHOICE.value,
             "label": "Audio Codec",
             "help": "Select audio codec",
             "choices": [
@@ -491,22 +492,22 @@ hevc265 = Codec(
                 {"label": "aac", "command_value": "aac"}
             ],
             "cli_flag": "-c:a",
-            "context": "audio codec",
+            "context": Context.AUDIO_CODEC.value,
             "resettable": False
         },
 
         "audio bitrate": {
-            "type": "direct",
+            "type": Type.DIRECT.value,
             "label": "Audio Bitrate",
             "help": "Enter audio bitrate."
                     "\nUse k for kbps, M for Mbps",
             "cli_flag": "-b:a",
-            "context": "audio codec options",
+            "context": Context.AUDIO_CODEC_OPTION.value,
             "resettable": False,
         },
 
         "container": {
-            "type": "choice",
+            "type": Type.CHOICE.value,
             "label": "Container",
             "help": "Select container:",
             "choices": [
@@ -514,12 +515,12 @@ hevc265 = Codec(
                 {"label": "mkv", "command_value": "mkv"},
                 {"label": "mp4", "command_value": "mp4"}
             ],
-            "context": "special",
+            "context": Context.SPECIAL.value,
             "resettable": False
         },
 
         "uneven scale fix": {
-            "type": "choice",
+            "type": Type.CHOICE.value,
             "label": "Uneven Scale Fix",
             "help": "This codec needs height and width to be even numbers",
             "choices": [
@@ -527,7 +528,7 @@ hevc265 = Codec(
                 {"label": "Crop 1px", "command_value": helpers.ResolutionFixer.CROP},
                 {"label": "Don't change", "command_value": helpers.DONT_CHANGE_STRING}
             ],
-            "context": "video filters",
+            "context": Context.VIDEO_FILTER.value,
             "resettable": False
         }
     }

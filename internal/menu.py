@@ -139,7 +139,7 @@ class Menu:
                     break
                 Menu.clear_screen()
             elif choice.lower() == "r":
-                self.settings["scale"] = None
+                self.settings["scale"] = helpers.DONT_CHANGE_STRING
                 Menu.clear_screen()
                 break
             else:
