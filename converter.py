@@ -13,7 +13,7 @@ helpers.check_ffmpeg_installed()
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="FF8MBOOP - batch video converter")
+    parser = argparse.ArgumentParser(description="FFBOOP - batch video converter")
     parser.add_argument("files", nargs="*", help="Input video files, separated by space")
     parser.add_argument("--codec", type=str, help="Codec to use (e.g., h264, hevc, vp9)")
     parser.add_argument("--skip-menu", action="store_true", help="Skip interactive menu")
@@ -45,7 +45,7 @@ def resolve_codec(preselected_codec=None, skip_menu: bool = False):
 
 
 def main(preselected_codec=None, skip_menu: bool = False):
-    helpers.os_adapter.set_terminal_title("FF8MBOOP")
+    helpers.os_adapter.set_terminal_title("FFBOOP")
 
     files = args.files
     '''if not files:
@@ -55,7 +55,7 @@ def main(preselected_codec=None, skip_menu: bool = False):
     # Выбор кодека
     codec = resolve_codec(preselected_codec, skip_menu=skip_menu)
 
-    helpers.os_adapter.set_terminal_title(f"FF8MBOOP - {codec.name}")
+    helpers.os_adapter.set_terminal_title(f"FFBOOP - {codec.name}")
 
     # Загружаем стандартные значения
     settings = helpers.load_options(codec.name)
