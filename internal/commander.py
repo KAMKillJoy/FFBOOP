@@ -1,0 +1,235 @@
+import os
+
+from internal import helpers
+from internal.codec_schema import Context
+from internal.my_codecs import Codec
+
+
+class Commander:
+    def __init__(self, codec: Codec, settings: dict):
+        """
+        codec    - объект Codec
+        settings - словарь с выбранными параметрами из Menu
+        """
+        self.codec = codec
+        self.settings = settings
+
+    def __parse_params(self, context) -> dict:
+        params = self.codec.params
+        return {key: value
+                for key, value in params.items() if isinstance(value, dict) and value.get("context") == context}
+
+    def __build_filter_params_string(self,
+                                     context: str,
+                                     option_flag: str = "",
+                                     kv_sep: str = "=",
+                                     join_sep: str = ":",
+                                     exclude: tuple[str, ...] = ()
+                                     ) -> str:
+        """
+        Формирует строку флагов для конкретного параметра.
+
+        Аргументы:
+            context: Имя параметра, для которого собираем флаги (например, "scale").
+            option_flag: CLI-флаг перед набором флагов (например, "-vf").
+            kv_sep: Разделитель между ключом и значением (например, "=").
+            join_sep: Разделитель между несколькими флагами (например, ":").
+            exclude: Ключи, которые нужно пропустить.
+
+        Возвращает:
+            str: Строка с флагами для ffmpeg, готовая к вставке.
+        """
+        flags_list = []
+        flags = self.__parse_params(context)
+        for key, value in flags.items():
+            val = self.settings.get(key)
+            if key in exclude or helpers.is_skip_param(val):
+                continue
+            cli_flag = value.get("cli_flag")
+            flags_list.append(f"{cli_flag}{kv_sep}{val}" if cli_flag else str(val))
+
+        return f'{option_flag} {join_sep.join(flags_list)}'.strip() if flags_list else ""
+
+    def __build_options_string(self,
+                               context: str,
+                               option_flag: str,
+                               kv_separator: str,
+                               join_sep: str,
+                               exclude: tuple[str, ...] = ()
+                               ) -> str:
+        """
+        Формирует строку опций ffmpeg для конкретного контекста, готовую для вставки в команду.
+
+        Аргументы:
+            context (str): Контекст настроек для обработки
+                (например, "video filters", "audio filters" или "global").
+            option_flag (str): Флаг, который будет добавлен перед опциями
+                (например, "-vf" для видеофильтров). Можно оставить пустым для глобальных опций.
+            kv_separator (str): Разделитель между флагом и его значением
+                (например, "=" для "-crf=21" или пробел для "-crf 21").
+            join_sep (str): Разделитель между несколькими опциями в результирующей строке
+                (например, "," для фильтров или пробел для глобальных опций).
+            exclude (tuple[str, ...], optional): Ключи настроек, которые нужно исключить из результата. По умолчанию ().
+
+        Возвращает:
+            str: Сформированная часть строки командной строки с опциями для ffmpeg.
+                 Если нет валидных опций — возвращается пустая строка.
+        """
+
+        o_params = self.__parse_params(context)
+        params_list = []
+        for key, value in o_params.items():
+            val = self.settings.get(key)
+            if key in exclude:
+                continue
+            if helpers.is_skip_param(val):
+                continue
+            param_context = f"{key} filter parameter"
+            params_string = self.__build_filter_params_string(param_context)
+            if params_string:
+                fp_flag = value.get('filter parameters flag') or ':'
+                val += f"{fp_flag}{params_string}"
+
+            cli_flag = value.get("cli_flag")
+            if cli_flag:
+                params_list.append(f"{cli_flag}{kv_separator}{val}")
+            else:
+                params_list.append(f"{val}")
+
+        o_string = f'{option_flag} {f"{join_sep}".join(params_list)}' if params_list else ""
+        return o_string.strip()
+
+    def __build_video_filters_substr(self):
+        video_filters = self.__build_options_string(context=Context.VIDEO_FILTER.value,
+                                                    option_flag="-vf",
+                                                    kv_separator="=",
+                                                    join_sep=",")
+        return video_filters
+
+    def __build_audio_filters_substr(self):
+        audio_filters = self.__build_options_string(context=Context.AUDIO_FILTER.value,
+                                                    option_flag="-af",
+                                                    kv_separator="=",
+                                                    join_sep=",")
+        return audio_filters
+
+    def __build_video_codec_options_substr(self):
+        video_codec_options = self.__build_options_string(context=Context.VIDEO_CODEC_OPTION.value,
+                                                          option_flag="",
+                                                          kv_separator=" ",
+                                                          join_sep=" ")
+        return video_codec_options
+
+    def __build_audio_codec_options_substr(self):
+        audio_codec_options = self.__build_options_string(context=Context.AUDIO_CODEC_OPTION.value,
+                                                          option_flag="",
+                                                          kv_separator=" ",
+                                                          join_sep=" ")
+        return audio_codec_options
+
+    def __build_audio_codec_substr(self):
+        audio_codec = self.__build_options_string(context=Context.AUDIO_CODEC.value,
+                                                  option_flag="",
+                                                  kv_separator=" ",
+                                                  join_sep=" ")
+        return audio_codec
+
+    def __build_special_codec_parameters_substr(self):
+        special_codec_parameters = self.__build_options_string(context=Context.VIDEO_SPECIAL_CODEC_OPTIONS.value,
+                                                               option_flag=self.codec.special_codec_parameters_flag,
+                                                               kv_separator="=",
+                                                               join_sep=":")
+        return special_codec_parameters
+
+    @staticmethod
+    def _join(parts: list[str]) -> str:
+        return ' '.join(p for p in parts if p)
+
+    def build_ffmpeg_command(self, file: str, output_dir) -> str:
+        """
+        Генерация ffmpeg команды для одного файла с учётом настроек.
+        """
+
+        filename, ext = os.path.splitext(os.path.basename(file))
+        param_for_name = f'_q{self.settings.get("crf")}'  # магические литералы, может исправлю.
+        passes = self.settings.get("passes")
+        container = self.settings.get("container")
+        video_codec = self.codec.vcodec
+        audio_codec = self.__build_audio_codec_substr()
+        video_codec_options = self.__build_video_codec_options_substr()
+        video_filters = self.__build_video_filters_substr()
+        audio_codec_options = self.__build_audio_codec_options_substr()
+        audio_filters = self.__build_audio_filters_substr()
+
+        special_codec_parameters = self.__build_special_codec_parameters_substr()
+
+        output_file = os.path.join(output_dir, f'{filename}_{self.codec.name}{param_for_name}')
+
+        if passes not in ("One-Pass", "Two-Pass", None):
+            raise ValueError(f"Passes should be one of 'One-Pass', 'Two-Pass'")
+
+        elif passes in ("One-Pass", None):
+            cmd_parts = [
+                'ffmpeg -y',
+
+                # INPUT
+                f'-i "{file}"',
+
+                # VIDEO
+                video_filters,
+                f'-c:v {video_codec}',
+                video_codec_options,
+                special_codec_parameters,
+
+                # AUDIO
+                audio_filters,
+                audio_codec,
+                audio_codec_options,
+
+                # OUTPUT
+                f'"{output_file}_1pass.{container}"'
+            ]
+            cmd = self._join(cmd_parts)
+        else:  # passes == "Two-Pass"
+            cmd1_parts = [
+                'ffmpeg -y',
+
+                # INPUT
+                f'-i "{file}"',
+
+                # VIDEO
+                video_filters,
+                f'-c:v {video_codec}',
+                video_codec_options,
+                special_codec_parameters,
+
+                # OUTPUT
+                f'-pass 1 -an -f null {helpers.os_adapter.NULL_DEVICE}'
+            ]
+
+            cmd2_parts = [
+                'ffmpeg -y',
+
+                # INPUT
+                f'-i "{file}"',
+
+                # VIDEO
+                video_filters,
+                f'-c:v {video_codec}',
+                video_codec_options,
+                special_codec_parameters,
+
+                # AUDIO
+                audio_filters,
+                audio_codec,
+                audio_codec_options,
+
+                # OUTPUT
+                f'"{output_file}_2pass.{container}"'
+            ]
+
+            cmd1 = self._join(cmd1_parts)
+            cmd2 = self._join(cmd2_parts)
+
+            cmd = f'{cmd1} && {cmd2}'
+        return cmd

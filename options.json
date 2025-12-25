@@ -1,0 +1,42 @@
+{
+  "vp9": {
+    "crf": 35,
+    "scale": "don't change",
+    "scale filter": "area",
+    "deadline": "good",
+	"tune": "-1",
+    "fps": "don't change",
+    "pixel_format": "yuv420p",
+    "passes": "Two-Pass",
+    "container": "mp4",
+    "audio codec": "libopus",
+    "audio bitrate": "128k"
+  },
+  "svt-av1": {
+    "crf": 27,
+    "scale": "don't change",
+    "scale filter": "area",
+    "preset": "5",
+	"tune": "3",
+    "fps": "don't change",
+    "pixel_format": "yuv420p",
+    "container": "mp4",
+    "audio codec": "libopus",
+    "audio bitrate": "128k",
+    "uneven scale fix": "pad=width=ceil(iw/2)*2:height=ceil(ih/2)*2"
+  },
+  "hevc": {
+    "crf": 23,
+    "scale": "don't change",
+    "scale filter": "area",
+    "preset": "medium",
+	"tune": "don't change",
+    "fps": "don't change",
+    "pixel_format": "yuv420p",
+    "passes": "Two-Pass",
+    "container": "mp4",
+    "audio codec": "libopus",
+    "audio bitrate": "128k",
+    "uneven scale fix": "pad=width=ceil(iw/2)*2:height=ceil(ih/2)*2"
+  }
+}

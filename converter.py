@@ -1,0 +1,106 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+import subprocess
+import sys
+from datetime import datetime
+
+from internal import commander, helpers, my_codecs
+from internal.menu import Menu
+
+helpers.check_ffmpeg_installed()
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="FF8MBOOP - batch video converter")
+    parser.add_argument("files", nargs="*", help="Input video files, separated by space")
+    parser.add_argument("--codec", type=str, help="Codec to use (e.g., h264, hevc, vp9)")
+    parser.add_argument("--skip-menu", action="store_true", help="Skip interactive menu")
+    parser.add_argument("--output-dir", type=str, help="Override output directory")
+    return parser.parse_args()
+
+
+args = parse_args()
+codecs = my_codecs.Codec.codecs
+
+
+def resolve_codec(preselected_codec=None, skip_menu: bool = False):
+    # если кодек выбран при запуске специфичного конвертора
+    if preselected_codec:
+        return preselected_codec
+
+    # Если кодек передан аргументом
+    if args.codec:
+        codec = next((c for c in codecs if c.name.lower() == args.codec.lower()), None)
+        if codec:
+            return codec
+        print(f"Codec '{args.codec}' not supported.")
+
+    # Если не нашли или не передали — спрашиваем у пользователя
+    if not skip_menu and not args.skip_menu:
+        return Menu.choose_codec_menu(codecs)
+
+    sys.exit("No valid codec selected, exiting.")
+
+
+def main(preselected_codec=None, skip_menu: bool = False):
+    helpers.os_adapter.set_terminal_title("FF8MBOOP")
+
+    files = args.files
+    '''if not files:
+        print("No input files. Drag & drop video files onto this script.")
+        return'''
+
+    # Выбор кодека
+    codec = resolve_codec(preselected_codec, skip_menu=skip_menu)
+
+    helpers.os_adapter.set_terminal_title(f"FF8MBOOP - {codec.name}")
+
+    # Загружаем стандартные значения
+    settings = helpers.load_options(codec.name)
+
+    # Меню для настройки параметров
+    if not skip_menu and not args.skip_menu:
+        menu = Menu(codec, settings)
+        menu.show()
+    else:
+        print("Skipping menu, using settings from options.json")
+
+    # Commander для генерации команд
+    cmd_builder = commander.Commander(codec, settings)
+
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    if not args.output_dir:
+        output_dir = os.path.join(script_dir, "output")  # тут можно поменять папку выходных файлов
+    else:
+        output_dir = args.output_dir
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    start_time = datetime.now()
+
+    Menu.clear_screen()
+
+    for file in files:
+        if not os.path.exists(file):
+            print(f"File not found: {file}")
+            continue
+
+        cmd = cmd_builder.build_ffmpeg_command(file, output_dir)
+        print(f"Running:\n{cmd}\n")
+        try:
+            subprocess.run(cmd, shell=True, check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Error occurred while processing {file}: {e}")
+
+    end_time = datetime.now()
+    total_duration = end_time - start_time
+    print(f"All done! Total processing time: {total_duration}")
+
+    input("Press Enter to open the output folder, or close this window manually.")
+    helpers.os_adapter.open_directory(output_dir)
+
+
+if __name__ == "__main__":
+    main()
